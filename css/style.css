@@ -1,0 +1,189 @@
+/*
+* M Y - F O L T *
+*/
+
+/* FONT */
+@import url('https://fonts.googleapis.com/css?family=Josefin+Sans:100:300,400,700');
+
+/* CSS Reset */
+*,
+*::before,
+*::after { 
+  margin: 0;
+  padding: 0;
+}
+
+/* Gobal styles */
+html {
+  font-size: 10px;
+  font-family: 'Josefin Sans', sans-serif;
+}
+
+body {
+  background: radial-gradient( #e0f5e9, #e1f5e8);
+  margin: 4rem auto;
+  text-align: center;
+}
+ 
+.clearfix::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.main-title {
+  margin: 0 auto;
+  text-align: center;
+}
+
+.header-cell {
+  display: inline-block;
+  height: 9rem;
+  width: 12.4rem;
+  padding-top: 3.4rem;
+}
+
+h1 {
+  font-size: 8rem;
+  color: #fff;
+  font-weight: 400;
+  margin-bottom: 4rem;
+}
+
+.game-container {
+  width: 64rem;
+  margin: 4rem auto;
+  height: 113.6rem;
+}
+
+.game-screen {
+  background-color: #e7e7e7;
+ }
+
+/*
+* GAME SCREEN
+*/
+/* Header */
+ .game-header {
+   height: 12.5rem;
+   background-color: #141413;
+   position: relative;
+  }
+
+/* Arrow */
+.arrow-up {
+  position: absolute;
+  bottom: 0;
+  left: 3.8rem;
+  width: 0; 
+  height: 0; 
+  border-left: 1.25rem solid transparent;
+  border-right: 1.25rem solid transparent;
+  border-bottom: 1.25rem solid #e7e7e7;
+}
+
+/* Next colors */
+.next-colors { 
+  padding-top: 3.6rem;
+  padding-left: 2.6rem;  
+}
+
+.color-list {
+  list-style: none;
+}
+.color-list li {
+  float: left;
+  margin-right: .8rem;
+}
+
+.preview-cell {
+  float: left;
+  height: 5.1rem;
+  width: 5.1rem;
+}
+
+/* Level achivement and target */
+.level-goal { 
+  color: #fff;
+  font-size: 2rem;
+  float: left;
+  margin-top: 1.6rem;
+  font-style: italic;
+ }
+
+.thin-line { 
+  font-size: 1rem;
+  vertical-align: .2rem;
+  margin-left: 2rem;
+  margin-right: 1.6rem;
+}
+
+/* Menu */
+.back-to-menu { 
+  float: right;
+  margin-right: 3rem;
+  width: 5.6rem;
+  height: 5.6rem;
+  background-color: #232322;
+}
+
+.back-to-menu a:link,
+.back-to-menu a:visited,
+.back-to-menu a:hover,
+.back-to-menu a:active {
+  width: 5.6rem;
+  height: 5.6rem;
+  display: block;
+  font-size: 4rem;
+  font-weight: 300;
+  line-height: 6rem;
+  color: #fff;
+  text-decoration: none;
+}
+
+/*
+* GAME BOARD
+*/
+
+/* BOARD */
+.game-board-container {
+  background-color: #e7e5e7;
+  padding: 7rem 1rem;
+}
+
+.board {
+  background-color: #fff;
+  height: 86.6rem;
+  width: 62rem;
+}
+
+.cell {
+  float: left;
+  height: 12.2rem;
+  width: 12.2rem;
+  position: relative;
+  border: 1px solid #000;
+}
+
+.current, .win, .lost {
+
+}
+
+.current {
+  height: 1.8rem;
+  width: 1.8rem;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  margin: 5.1rem 5.1rem;
+}
+
+.win,
+.lost {
+  font-size: 4rem;
+  line-height: 13.2rem; 
+  color: #fff;
+}
+
+.blue { background-color: #60c5d7; }
+.grey { background-color: #313644; }
+.red { background-color: #f70030; }
