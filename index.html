@@ -6,7 +6,6 @@
   </head>
   <body>
     <div class="main-container clearfix">
-      <!--<h1>M Y&nbsp;&nbsp;&nbsp;&nbsp;F O L T</h1>
       <h1>
         <div class="main-title">
           <span class="header-cell blue">M</span><span class="header-cell red">Y</span>
@@ -15,16 +14,16 @@
           <span class="header-cell grey">F</span><span class="header-cell red">O</span><span class="header-cell blue">L</span><span class="header-cell grey">T</span>
         </div>
       </h1>
-      </div>-->
+      </div>
       <div class="game-container">
         <div class="game-screen">
           <header class="game-header clearfix">
             <div class="arrow-up"></div>
             <div class="next-colors">
               <ul class="color-list">
-                <li class="preview-cell" data-color="blue"></li>
-                <li class="preview-cell" data-color="grey"></li>
-                <li class="preview-cell" data-color="blue"></li>
+                <li class="preview-cell"></li>
+                <li class="preview-cell"></li>
+                <li class="preview-cell"></li>
               </ul>
             </div>
             <div class="level-goal">
@@ -41,19 +40,9 @@
 
           <div class="game-board-container">
             <div class="board">
-              <!--<div class="cell blue" data-row="data-row-0" data-col="data-col-0" data-color="blue"></div>
-              <div class="cell grey" data-row="data-row-0" data-col="data-col-1" data-color="blue">
-                <div class="lost">&#9587;</div>
-              </div>
-              <div class="cell red " data-row="data-row-0" data-col="data-col-0" data-color="blue">
-                <div class="current"></div>
-              </div>
-              <div class="cell blue" data-row="data-row-0" data-col="data-col-0" data-color="blue"></div>
-              <div class="cell grey" data-row="data-row-0" data-col="data-col-0" data-color="blue"></div>
-              <div class="cell blue" data-row="data-row-0" data-col="data-col-0" data-color="blue"></div>
-              <div class="cell red" data-row="data-row-0" data-col="data-col-0" data-color="blue">
-                <div class="win">&#9532;</div>
-              </div>-->
+              <!-- Current => AppendChild to '.cell': <div class="current"></div> -->
+              <!-- Won => AppendChild to '.cell': <div class="won">&#9532;</div> -->
+              <!-- Lost => AppendChild to '.cell': <div class="lost">&#9587;</div> -->
             </div> <!-- end: board -->
           </div> <!-- end: game-board-container -->
 
