@@ -19,6 +19,6 @@ const level1Params = {
   width: 5,
   height : 7,
   initState : [{ row: 3, column: 2, color: 'blue', current: true }],
-  nextColorsQueue : ['blue', 'blue', 'grey','red','red'],
+  nextColorsQueue : ['red', 'blue', 'grey','red','red', 'blue', 'blue'],
   success : 15
 }

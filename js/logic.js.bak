@@ -1,7 +1,7 @@
 /* Javascript file handling the game logic */
 
 /*
- * OBJECT: PLAYER
+ * PLAYER
  */
 function Player() {
   this.activeTiles = []; // list of all the tiles the player created
@@ -15,18 +15,9 @@ function Player() {
 }
 
 /*
- * PLAYER OBJECT FUNCTIONS
- */
-/*
- *
- * 
- * 
+ * PLAYER FUNCTIONS
  */
 Player.prototype.move = function (level) {
-  
-  // First things first, set .alreadyCheck and .matched to false for all activeTiles elements
-  this.clearActiveMatches();
-
   // Tells if a user can move or not
   var isStuck = false;
 
@@ -61,9 +52,15 @@ Player.prototype.move = function (level) {
     this.nbLevelMoves += 1;
     this.nbMoves += 1;
 
+    
+    // If the user cannot move anymore, then move the tile and end game
+    if ( !this.isFreeTileAround(this.nextTile, level) ) {
+      isStuck = true;
+    }
+
     // The move is correct
     // Save the move
-    var currentValidMove = {
+    var currenrValidMove = {
       row: this.nextTile.row,
       column: this.nextTile.column,
       color: this.nextTile.color,
@@ -71,13 +68,13 @@ Player.prototype.move = function (level) {
     };
 
     // Set the new current tile
-    this.currentTile = currentValidMove;
+    this.currentTile = currenrValidMove;
 
     // Remove current from previous tile
     this.activeTiles[this.activeTiles.length - 1].current = false;
 
     // Add this new tile to the activeTiles array
-    this.activeTiles.push(currentValidMove);
+    this.activeTiles.push(currenrValidMove);
     
     // Update the next colors array
     level.nextColorsQueue.shift();
@@ -88,33 +85,20 @@ Player.prototype.move = function (level) {
         level.nextColorsQueue.push(levelParams.nextColorsQueue[index]);
       }
     }
-    
-    // If the next position makes 3 tiles of the same color
-    var nbMatches = this.getNbMatches(level);
-    
-    if ( nbMatches >= 3 ) {
-    
-      // Clear all previous matches
-      this.clearMatches();
 
-      // Update the player score. It will be updated next time the level is drawn
-      this.levelScore += nbMatches;
-
-      if ( this.levelScore >= level.success ) {
-        // The player won the level!
-        level.win(this);
-      }
-    } else {
-      // Set .alreadyCheck and .matched to false for all activeTiles elements
-      this.clearActiveMatches();
-    }
-
-    // Finally, if the user cannot move anymore, then end the level
-    if ( !this.isFreeTileAround(this.currentTile, level) ) {      
+    // End game if stuck
+    if ( isStuck ) {
+      // No free tiles around => Game Over
+      console.log("booo");
       level.lost(this);
     } 
+
+    // If the next position makes 3 tiles of the same color
+    if ( this.isMatch(level) ) {
+      console.log("FUCKING MATCH!!!!");
+    } 
   } else if ( this.isFreeTileAround(this.currentTile, level) ) {
-    console.log("You can't move to this position");
+    console.log("Next position is either not free or out of bound");
   } else {
     // No free tiles around => Game Over
     console.log("Do we ever get here?")
@@ -122,20 +106,6 @@ Player.prototype.move = function (level) {
 
   }
 }
-
-
-/* 
- * FUNCTION: Removes all the matched tiles, except the current tile, from the 'Player.activeTiles' array
- * PARAMETERS: None
- * RETURNS: Undefined
- */
-Player.prototype.clearMatches = function() {
-  for (var index = this.activeTiles.length -1; index >= 0; index -= 1) {    
-    if ( this.activeTiles[index].matched && !this.activeTiles[index].current ) {
-      this.activeTiles.splice(index, 1);
-    }
-  }
-};
 
 
 // Function used to check if the next tile is free to move
@@ -193,28 +163,24 @@ Player.prototype.isActive = function(tile) {
 
 
 // Tells if a tile is active
-Player.prototype.isSameColor = function(tile1Index, tile2Index) {
-  if ( tile1Index === -1 || tile2Index === -1 ) {
-    return false;
-  } 
+Player.prototype.isSameColor = function(tile1, tile2) {
+  // Retrieve the data of the first tile to test, from the active tiles array
+  var tile1FromActiveTiles = this.activeTiles.find(function(element) {
+    return element.row === tile1.row && element.column === tile1.column;
+  }) || 0; // Set to 0 if undefined
+
+  // Retrieve the data of second tile to test, from the active tiles array
+  var tile2FromActiveTiles = this.activeTiles.find(function(element) {
+    return element.row === tile2.row && element.column === tile2.column;
+  }) || 0; // Set to 0 if undefined
   
-  // if the color matches, return the tile2 index
-  if ( this.activeTiles[tile1Index].color === this.activeTiles[tile2Index].color ) {
-    return tile2Index;
-  } else {
-    return false;
-  }
+  console.log("Tile 1: " + tile1FromActiveTiles.row +", "+tile1FromActiveTiles.column + " - Tile 2: " + tile2FromActiveTiles.row + ", " + tile2FromActiveTiles.column);
+  console.log(tile1FromActiveTiles.color + " - " + tile2FromActiveTiles.color);
+
+
+  // if the color matches, return true
+  return tile1FromActiveTiles.color === tile2FromActiveTiles.color;
 };
-
-
-// Function returning the tile index from the 'activeTiles' array
-Player.prototype.getActiveTileIndex = function(tilePosition) {
-  var indexToReturn = this.activeTiles.find(function(element) {
-     return element.row === tilePosition.row && element.column === tilePosition.column
-  });
-   return this.activeTiles.indexOf(indexToReturn);
-};
-
 
 /* FUNCTION: Checks if a tile is touching another one with the same color, either up, right, down or left
  * PARAMETERS: Object including the reference tile
@@ -225,6 +191,17 @@ Player.prototype.getActiveTileIndex = function(tilePosition) {
  * }
  */
 Player.prototype.touchWithColor = function(tileToCheck) {
+  // Variables used to check if tiles are touching is a direction
+  var touchUp = false;
+  var touchRight = false;
+  var touchDown = false;
+  var touchLeft = false;
+
+  // Variables used to check if touching tiles have the same color
+  var upColorMatch = false;
+  var rightColorMatch = false;
+  var downColorMatch = false;
+  var leftColorMatch = false;
 
   // Set the values of the cells around
   var upTile    = { row: tileToCheck.row - 1, column: tileToCheck.column     };
@@ -232,99 +209,137 @@ Player.prototype.touchWithColor = function(tileToCheck) {
   var downTile  = { row: tileToCheck.row + 1, column: tileToCheck.column     };
   var leftTile  = { row: tileToCheck.row    , column: tileToCheck.column - 1 };
   
-  // Get tiles index from the 'activeTiles' array
-  var tileToCheckIndex = this.getActiveTileIndex(tileToCheck);
-  var upTileIndex = this.getActiveTileIndex(upTile);
-  var rightTileIndex = this.getActiveTileIndex(rightTile);
-  var downTileIndex = this.getActiveTileIndex(downTile);
-  var leftTileIndex = this.getActiveTileIndex(leftTile);
-   
-  // This array inclues objects storing the test results clockwise (0: result of test up, 1: result of test right, 2: result of test down, 3: result of test left)  
-  var objToReturn = [];
-
-  // Variables store the return values of the 'Player.isSameColor' function in the four directions, clockwise (up, right, down, left)
-  var isUpTileSameColor = this.isSameColor(tileToCheckIndex, upTileIndex);
-  var isRightTileSameColor = this.isSameColor(tileToCheckIndex, rightTileIndex);
-  var isDownTileSameColor = this.isSameColor(tileToCheckIndex, downTileIndex);
-  var isLeftTileSameColor = this.isSameColor(tileToCheckIndex, leftTileIndex);
-  
   // Checks if two tiles are touching and have the same color 
-  if ( this.isActive(upTile) && isUpTileSameColor !== false ) { objToReturn.push(isUpTileSameColor); }  // UP
-  if ( this.isActive(rightTile) && isRightTileSameColor !== false ) { objToReturn.push(isRightTileSameColor); }  // RIGHT
-  if ( this.isActive(downTile) && isDownTileSameColor !== false ) { objToReturn.push(isDownTileSameColor); }  // DOWN
-  if ( this.isActive(leftTile) && isLeftTileSameColor !== false ) { objToReturn.push(isLeftTileSameColor); } // LEFT  
-
-  // Mark the tileToCheck as alreadyChecked
-  this.activeTiles[tileToCheckIndex].alreadyChecked = true;
-
-  if ( objToReturn.length > 0 ) {
-    // Mark the tileToCheck as matched
-    this.activeTiles[tileToCheckIndex].matched = true;
+  // UP
+  if ( this.isActive(upTile) ) {
+    touchUp = true;
+    if ( this.isSameColor(tileToCheck, upTile) ) {
+      upColorMatch = true;
+     }
   }
 
-  // Return the array of matching indexes
+  // RIGHT
+  if ( this.isActive(rightTile) ) {
+    touchRight = true;
+    if ( this.isSameColor(tileToCheck, rightTile) ) {
+      rightColorMatch = true;
+     }
+  }
+
+  // DOWN
+  if ( this.isActive(downTile) ) {
+    touchDown = true;
+    if ( this.isSameColor(tileToCheck, downTile) ) {
+      downColorMatch = true;
+     }
+  }
+
+  // RIGHT
+  if ( this.isActive(leftTile) ) {
+    touchLeft = true;
+    if ( this.isSameColor(tileToCheck, leftTile) ) {
+      leftColorMatch = true;
+     }
+  }
+
+  // Built the array to return
+  // This array inclues objects storing the test results clockwise (0: result of test up, 1: result of test right, 2: result of test down, 3: result of test left)
+  var objToReturn = [
+    { tile1: tileToCheck, tile2: upTile, touchDirection: touchUp, colorMatch: upColorMatch },
+    { tile1: tileToCheck, tile2: rightTile, touchDirection: touchRight, colorMatch: rightColorMatch },
+    { tile1: tileToCheck, tile2: downTile, touchDirection: touchDown, colorMatch: downColorMatch },
+    { tile1: tileToCheck, tile2: leftTile, touchDirection: touchLeft, colorMatch: leftColorMatch }        
+  ];
+
+  // Return the array
   return objToReturn;
-};
-
-
-/*
- * 
-*/
-Player.prototype.findAllMatches = function (tileToCheck) {
-  // Test for touching tiles with the same color
-  var isTouchingWithSameColor = this.touchWithColor(tileToCheck);
-  
-  if ( isTouchingWithSameColor.length > 0 ) {
-    // For each touching tiles with the same color      
-    isTouchingWithSameColor.forEach(function (element) {
-      // if the tile has not been checked already
-      if( !this.activeTiles[element].alreadyChecked ) {
-        // Mark the tile as matched
-        this.activeTiles[element].matched;
-
-        // Check the tile and all following tiles that are touching and have the same color
-        this.findAllMatches(this.activeTiles[element]);
-      }
-    }.bind(this));
-  } 
-}
-
-/*
- * FUNCTION which reset all .alreadyChecked and .matched keys to false
- * 
-*/
-Player.prototype.clearActiveMatches = function() {
-  for (var index = 0; index < this.activeTiles.length; index += 1) {
-    this.activeTiles[index].alreadyChecked = false;
-    this.activeTiles[index].matched = false;
-  }
-};
-
-
-Player.prototype.countMatches = function() {
-  var counter = 0;
-  for (var index = 0; index < this.activeTiles.length; index += 1) {
-    if ( this.activeTiles[index].matched ) {
-      counter += 1;
-    }
-  }
-  return counter;
 };
 
 /*
  * Check if 3 or more tiles of the same color are touching
 */
-Player.prototype.getNbMatches = function(level) {
+Player.prototype.isMatch = function(level) {
+  
+  // [ARRAY] used to store the matches, initialised with the current tile
+  var matches = [this.activeTiles[this.activeTiles.length - 1]];
+  
+  // [ARRAY] used to store the list of active tiles used for match finding
+  var activeTilesLeftToCheck = this.activeTiles;
+  
+  // [ARRAY] used to store the return of the 'Player.touchWithColor' function
+  var isTouchingWithSameColor = [];
 
-  // Recursively check all touching tiles to find the ones with the same color
-  this.findAllMatches(this.activeTiles[this.activeTiles.length - 1]);
+  // [INTEGER] used as index of the 'activeTilesLeftToCheck' array in the following loop going backwards
+  var tileIndex = activeTilesLeftToCheck.length - 1;
+
+  // Check for matches until there is no tile to compare
+  do {
+
+    // Test for touching tiles with the same color
+    isTouchingWithSameColor = this.touchWithColor(activeTilesLeftToCheck[tileIndex]);
+
+    // Check if matches have been found by the 'Player.touchWithColor' function. 
+    // The function returns an array of object where:
+    // Row 0: result of check up
+    // Row 1: result of check right
+    // Row 2: result of check down
+    // Row 3: result of check left
+    
+    // TOUCH UP
+    if ( isTouchingWithSameColor[0].touchDirection ) { 
+      console.log("Touch Up");
+      if ( isTouchingWithSameColor[0].colorMatch ) { 
+        console.log("color match: ", activeTilesLeftToCheck[tileIndex].color);
   
-  // Count the number of tiles with the same color as the current one
-  var count = this.countMatches();
-  
-  // Return the number of matches
-  return count;
-} 
+        // Store the matching results
+        matches.push(isTouchingWithSameColor[0].tile2);
+
+        // Continue looking for matches in this direction
+      } else {
+        
+        // Remove the touching tiles with a different color form the 'activeTilesLeftToCheck' array to avoid checking them later
+        activeTilesLeftToCheck.splice(1, activeTilesLeftToCheck.indexOf(isTouchingWithSameColor[0].tile2));
+      }
+    }
+      
+
+    // TOUCH RIGHT
+    if ( isTouchingWithSameColor[1].touchDirection ) { 
+      console.log("Touch Right");
+      // Store the matching results
+      matches.push(isTouchingWithSameColor[1].tile2);
+    }
+
+
+    // TOUCH DOWN
+    if ( isTouchingWithSameColor[2].touchDirection ) { 
+      console.log("Touch Down");
+      // Store the matching results
+      matches.push(isTouchingWithSameColor[2].tile2);
+      // Remove the match from the 'activeTilesLeftToCheck' array
+      activeTilesLeftToCheck.splice(1, tileIndex);
+      
+      // Set the next index to check to the matching tile
+      tileIndex = activeTilesLeftToCheck.indexOf(isTouchingWithSameColor[2].tile1);
+    }
+
+
+    // TOUCH LEFT
+    if ( isTouchingWithSameColor[3].touchDirection ) { 
+      console.log("Touch Left");
+      // Store the matching results
+      matches.push(isTouchingWithSameColor[3].tile2);
+    }
+
+  } while (activeTilesLeftToCheck.length > 0);
+
+    // If matches has at least 3 items, then we have a match
+    if ( matches.length > 2 ) {
+      return true;
+    }
+
+  return false;
+}  
 
 
 /*
@@ -476,18 +491,16 @@ Level.prototype.drawPlayer = function(player) {
 
   // Draw each active tile
   for (var index = 0 ; index < player.activeTiles.length; index += 1) {
-      
-      // Find the cell to update on the board
-      var selector = '[data-row=' + player.activeTiles[index].row + ']' +
-                    '[data-col=' + player.activeTiles[index].column + ']';
-      // Init the color on the board
-      $(selector).addClass(player.activeTiles[index].color);
-      
-      // Set the current cell ( the cell with the o icon which is the first one the user can use )
-      if ( player.activeTiles[index].current ) {
-        $(selector).append($('<div>').addClass('current'));
-      }
-
+    // Find the cell to update on the board
+    var selector = '[data-row=' + player.activeTiles[index].row + ']' +
+                   '[data-col=' + player.activeTiles[index].column + ']';
+    // Init the color on the board
+    $(selector).addClass(player.activeTiles[index].color);
+    
+    // Set the current cell ( the cell with the o icon which is the first one the user can use )
+    if ( player.activeTiles[index].current ) {
+      $(selector).append($('<div>').addClass('current'));
+    }
   }
 
   // Set the player current score
@@ -503,7 +516,7 @@ Level.prototype.drawPlayer = function(player) {
 
 // Update display
 Level.prototype.update = function(player) {
-  player.move(this);  
+  player.move(this);
   this.clearPlayer(player);
   this.drawPlayer(player);
 }
@@ -566,35 +579,6 @@ Level.prototype.lost = function(player) {
     }
   }.bind(this), 400);
 }
-
-
-// Function handling when a user win the level
-Level.prototype.win = function(player) {
-  // A little delay is required to delete the current icon
-  setTimeout(function() { $('.current').remove(); }, 10 );
- 
-  // Change the current icon to the lost on
-  var selector = '[data-row=' + player.currentTile.row + ']' +
-                 '[data-col=' + player.currentTile.column + ']';
-
-  // Draw the lost icon on the current cell
-  $(selector).append($('<div>').addClass('won'));
-  $('.won').html("&#9532;");
-  
-  // Ask the user what they want to do after a few seconds
-  var timeoutId = setTimeout(function() {
-    var userChoice = confirm("Wow, you rock! Wanna replay this level?");
-    // If the user wants to retry, reset everything
-    if ( userChoice ) {
-      console.log("Cool, let's roll!");
-      this.resetLevel(player);
-
-    } else {
-      this.endLevel();
-    }
-  }.bind(this), 400);
-}
-
 
 /* 
  * GAME
