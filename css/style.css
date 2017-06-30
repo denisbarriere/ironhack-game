@@ -17,12 +17,15 @@
 html {
   font-size: 10px;
   font-family: 'Josefin Sans', sans-serif;
+  width: 100%;
+  height: 100%;
 }
 
 body {
   background: radial-gradient( #e0f5e9, #e1f5e8);
-  margin: 4rem auto;
   text-align: center;
+  width: 100%;
+  height: 100%;
 }
  
 .clearfix::after {
@@ -50,22 +53,25 @@ h1 {
   margin-bottom: 4rem;
 }
 
-.game-container {
-  width: 64rem;
-  margin: 4rem auto;
-  height: 113.6rem;
-}
-
-.game-screen {
-  background-color: #e7e7e7;
- }
 
 /*
 * GAME SCREEN
 */
+.game-container {
+  width: 100%;
+  height: 100%;
+}
+
+.game-screen {
+  background-color: #e7e7e7;
+  width: 100%;
+  height: 100%;
+ }
+
 /* Header */
  .game-header {
-   height: 12.5rem;
+   width: 100%;
+   height: 6.25rem;
    background-color: #141413;
    position: relative;
   }
@@ -74,69 +80,79 @@ h1 {
 .arrow-up {
   position: absolute;
   bottom: 0;
-  left: 3.8rem;
+  left: 5.9375%;
   width: 0; 
   height: 0; 
-  border-left: 1.25rem solid transparent;
-  border-right: 1.25rem solid transparent;
-  border-bottom: 1.25rem solid #e7e7e7;
+  border-left: 0.625rem solid transparent;
+  border-right: 0.625rem solid transparent;
+  border-bottom: 0.625rem solid #e7e7e7;
 }
 
 /* Next colors */
 .next-colors { 
-  padding-top: 3.6rem;
-  padding-left: 2.6rem;  
+  float:left;
+  padding-top: 5.625%;
+  padding-left: 4.0625%;  
+  width: 27.495%;
+  height: 100%;
+
+  /*position: absolute;
+  top: 50%;
+  margin-top: -4.08%;
+  left: 4.0625%;
+  width: 27.495%;
+  height: 100%;*/
 }
 
 .color-list {
   list-style: none;
-}
-.color-list li {
-  float: left;
-  margin-right: .8rem;
+  width: 100%;
+  height: 100%;
 }
 
 .preview-cell {
   float: left;
-  height: 5.1rem;
-  width: 5.1rem;
+  margin-right: 3.7907595779%;
+  height: 2.55rem;
+  width: 2.55rem;
 }
 
 /* Level achivement and target */
 .level-goal { 
   color: #fff;
-  font-size: 2rem;
+  font-size: 1.2rem;
   float: left;
-  margin-top: 1.6rem;
   font-style: italic;
+  margin-top: 7.5%;
  }
 
 .thin-line { 
-  font-size: 1rem;
-  vertical-align: .2rem;
-  margin-left: 2rem;
-  margin-right: 1.6rem;
+  font-size: 0.5rem;
+  vertical-align: 16%;
+  margin-left: 1rem;
+  margin-right: 0.8rem;
 }
 
 /* Menu */
 .back-to-menu { 
   float: right;
-  margin-right: 3rem;
-  width: 5.6rem;
-  height: 5.6rem;
+  margin-right: 1.5rem;
+  width: 2.8rem;
+  height: 2.8rem;
   background-color: #232322;
+  margin-top: 5.625%;
 }
 
 .back-to-menu a:link,
 .back-to-menu a:visited,
 .back-to-menu a:hover,
 .back-to-menu a:active {
-  width: 5.6rem;
-  height: 5.6rem;
+  width: 2.8rem;
+  height: 2.8rem;
   display: block;
-  font-size: 4rem;
+  font-size: 2rem;
   font-weight: 300;
-  line-height: 6rem;
+  line-height: 3rem;
   color: #fff;
   text-decoration: none;
 }
@@ -148,42 +164,181 @@ h1 {
 /* BOARD */
 .game-board-container {
   background-color: #e7e5e7;
-  padding: 7rem 1rem;
+  padding: 3.5rem 0.5rem;
 }
 
 .board {
   background-color: #fff;
-  height: 86.6rem;
-  width: 62rem;
+  height: 43.3rem;
+  width: 31rem;
 }
 
 .cell {
   float: left;
-  height: 12.2rem;
-  width: 12.2rem;
+  height: 6.2rem;
+  width: 6.2rem;
   position: relative;
-  border: 1px solid #000;
-}
-
-.current, .win, .lost {
-
 }
 
 .current {
-  height: 1.8rem;
-  width: 1.8rem;
+  height: 0.9rem;
+  width: 0.9rem;
   border-radius: 50%;
-  border: 2px solid #fff;
-  margin: 5.1rem 5.1rem;
+  border: 1px solid #fff;
+  margin: 2.55rem 2.55rem;
 }
 
 .won,
 .lost {
-  font-size: 4rem;
-  line-height: 13.2rem; 
+  font-size: 2rem;
+  line-height: 6.6rem; 
   color: #fff;
 }
 
 .blue { background-color: #60c5d7; }
 .grey { background-color: #313644; }
 .red { background-color: #f70030; }
+
+/*
+ * GAME INFORMATION BUBBLE
+ */
+.info {
+  display:none; 
+  color: #fff;
+  background-color: #000;
+  font-size: 1.6rem;
+  font-weight: 100;
+  position: absolute;
+  top: -72%;
+  z-index: 999;
+  padding: 1rem;
+}
+
+/* position the bubble horizontally on the left or right of the cell */
+.info.left { left: 68%; }
+.info.right { right: 68%; }
+
+/* Arrow displayed at the bottom left corner of the bubble */
+.info.left::before { 
+  content: "";
+  position: absolute;
+  bottom: -2rem;
+  right: 9rem;
+  border-width: 0 0 2rem 4rem;
+  border-style: solid;
+  border-color: transparent #000;
+  display: block;
+  width: 0;
+  z-index: 999;
+}
+
+.info.left::after {
+  content: "";
+  position: absolute;
+  bottom: -2rem;
+  right: 12rem;
+  border-width: 0 0 2rem 1rem;
+  border-style: solid;
+  border-color: transparent #60c5d7;
+  display: block;
+  width: 0;
+  z-index: 999;
+}
+
+/* Arrow displayed at the bottom right corner of the bubble */
+.info.right::before { 
+  content: "";
+  position: absolute;
+  bottom: -2rem;
+  right: 0rem;
+  border: 0;
+  border-right-width: 3rem;
+  border-bottom-width: 2rem;
+  border-style: solid;
+  border-color: transparent #000;
+  display: block;
+  width: 0;
+  z-index: 999;
+}
+
+.info.right::after {
+  content: "";
+  position: absolute;
+  bottom: -20px;
+  right: 0rem;
+  border: 0;
+  border-right-width: 1rem;
+  border-bottom-width: 2rem;
+  border-style: solid;
+  border-color: transparent #60c5d7;
+  display: block;
+  width: 0;
+  z-index: 999;
+}
+
+/* Size of the first info bubble */
+.info.first-info { 
+  width: 10.8rem;
+}
+
+/* Size of the second info bubble */
+.info.second-info { 
+  width: 12rem;
+}
+
+/* Size of the third info bubble */
+.info.third-info { 
+  width: 12rem;
+  top: -48%;
+}
+
+.info.left.third-info::before { right: 10rem; }
+.info.left.third-info::after {right: 13rem; }
+
+/* Size of the forth info bubble */
+.info.fourth-info { 
+  width: 6em;
+  top: -15%;
+}
+
+.info.left.fourth-info::before { 
+  content: "";
+  position: absolute;
+  top: -2rem;
+  left: 0rem;
+  border: 0;
+  border-left-width: 3rem;
+  border-top-width: 2rem;
+  border-style: solid;
+  border-color: transparent #000;
+  display: block;
+  width: 0;
+  height: 0;
+ }
+.info.left.fourth-info::after {
+  content: "";
+  position: absolute;
+  top: -20px;
+  left: 0rem;
+  border: 0;
+  border-left-width: 1rem;
+  border-top-width: 2rem;
+  border-style: solid;
+  border-color: transparent #e7e7e7;
+  display: block;
+  width: 0;
+  height: 0;
+ }
+
+/* Size of the fifth info bubble */
+.info.fifth-info { 
+  width: 12rem;
+}
+
+/* Used to display the arrow in the info bubble with the right color */
+.info.blue::after { border-color: transparent #60c5d7; }
+.info.red::after { border-color: transparent #f70030; }
+.info.grey::after { border-color: transparent #313644; }
+
+/* Hide the audio tag */
+audio { display: none; }
