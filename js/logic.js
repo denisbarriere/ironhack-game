@@ -834,18 +834,6 @@ function Game() {
   this.level = new Level(level1Properties);
   this.level.initLevel(this.player);
 
-  // init sounds
-  // ion.sound({
-  //   sounds: [
-  //       {name: "branch_break"}
-  //    ],
-
-  //   // main config
-  //   path: "./lib/ion.sound-3.0.7/sounds/",
-  //   preload: true,
-  //   multiplay: true,
-  //   volume: 0.9
-  // });
 }
 
 /*

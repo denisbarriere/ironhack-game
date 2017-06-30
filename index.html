@@ -12,50 +12,63 @@
     <link rel="shortcut icon" href="./images/favicon.png" type="image/x-icon" />
   </head>
   <body>
-    <!--<div class="main-container clearfix">
+    <!-- LOADER WRAPPER WITH GAME TITLE -->
+    <div class="game-loading-container">
       <h1>
-        <div class="main-title">
-          <span class="header-cell blue">M</span><span class="header-cell red">Y</span>
+        <div class="game-loading-container__title">
+          <span class="loading-cell light-green">M</span><span class="loading-cell red">Y</span>
         </div>
-        <div class="main-title">
-          <span class="header-cell grey">F</span><span class="header-cell red">O</span><span class="header-cell blue">L</span><span class="header-cell grey">T</span>
+        <div class="game-loading-container__title">
+          <span class="loading-cell blue">F</span><span class="loading-cell red">O</span><span class="loading-cell blue">L</span><span class="loading-cell light-green">T</span>
         </div>
       </h1>
-      </div>-->
-      <div class="game-container">
-        <div class="game-screen">
-          <header class="game-header clearfix">
-            <div class="arrow-up"></div>
-            <div class="next-colors">
-              <ul class="color-list">
-                <li class="preview-cell"></li>
-                <li class="preview-cell"></li>
-                <li class="preview-cell"></li>
-              </ul>
-            </div>
-            <div class="level-goal">
-              <span class="thin-line">&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;</span>
-              <span class="level-goal__progress">0</span>
-              <span> / </span>
-              <span class="level-goal__target">0</span>
-              <span class="thin-line">&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;</span>
-            </div>
-            <div class="back-to-menu">
-              <a href="#">?</a>
-            </div>
-          </header>
+    </div> <!-- end: game-loading-container -->
 
-          <div class="game-board-container">
-            <div class="board">
-              <!-- Current => AppendChild to '.cell': <div class="current"></div> -->
-              <!-- Won => AppendChild to '.cell': <div class="won">&#9532;</div> -->
-              <!-- Lost => AppendChild to '.cell': <div class="lost">&#9587;</div> -->
-            </div> <!-- end: board -->
-          </div> <!-- end: game-board-container -->
+    <!-- Level loader -->
+    <div class="level-loading-container clearfix">  
+      <div class="level">
+        <p>Level <span>1</span></p>
+        <div class="levelTarget">
+          <p>Make <span>15</span></p>
+          <p>Matches!</p>
+        </div>
+      </div>
+    </div> <!-- end: level-loading-container -->
+    
+    <!-- Actual game container -->
+    <div class="game-container">
+      <div class="game-screen">
+        <header class="game-header clearfix">
+          <div class="arrow-up"></div>
+          <div class="next-colors">
+            <ul class="color-list">
+              <li class="preview-cell"></li>
+              <li class="preview-cell"></li>
+              <li class="preview-cell"></li>
+            </ul>
+          </div>
+          <div class="level-goal">
+            <span class="thin-line">&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;</span>
+            <span class="level-goal__progress">0</span>
+            <span> / </span>
+            <span class="level-goal__target">0</span>
+            <span class="thin-line">&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;</span>
+          </div>
+          <div class="back-to-menu">
+            <a href="#">?</a>
+          </div>
+        </header>
 
-        </div><!-- end: level-screen -->
-      </div> <!-- end: game-container -->
-    </div> <!-- end: main-container -->
+        <div class="game-board-container">
+          <div class="board">
+            <!-- Current => AppendChild to '.cell': <div class="current"></div> -->
+            <!-- Won => AppendChild to '.cell': <div class="won">&#9532;</div> -->
+            <!-- Lost => AppendChild to '.cell': <div class="lost">&#9587;</div> -->
+          </div> <!-- end: board -->
+        </div> <!-- end: game-board-container -->
+
+      </div><!-- end: level-screen -->
+    </div> <!-- end: game-container -->
 
   </body>
   <!-- Link to JS libraries -->
