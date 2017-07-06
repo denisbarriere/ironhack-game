@@ -13,13 +13,15 @@
   padding: 0;
 }
 
-/* Gobal styles */
+/* 
+ * GLOBAL STYLES
+*/
 html {
   font-size: 10px;
   font-family: 'Josefin Sans', sans-serif;
   width: 100%;
   height: 100%;
-  overflow: hidden;
+  /*overflow: hidden;*/
 }
 
 body {
@@ -28,42 +30,19 @@ body {
   width: 100%;
   height: 100%;
   position: relative;
-  overflow: hidden;
+  /*overflow: hidden;*/
 }
- 
+
 .clearfix::after {
   content: "";
   display: table;
   clear: both;
 }
 
-.main-title {
-  margin: 0 auto;
-  text-align: center;
-}
-.main-title:first-child {
-  padding-top: 20vh;
-  /*margin-top: -3.25rem;*/
-}
-
-.header-cell {
-  display: inline-block;
-  height: 4.5rem;
-  width: 6.2rem;
-  padding-top: 1.7rem;
-}
-
-h1 {
-  font-size: 4rem;
-  color: #fff;
-  font-weight: 400;
-  margin-bottom: 4rem;
-}
 
 /*
- * 
+ * GAME TITLE -- LOADING SCREEN --
 */
-
 .game-loading-container { 
   background-color: #fff;
   width: 100vw;
@@ -75,14 +54,23 @@ h1 {
   left: 0;
 }
 
-.game-loading-container > h1 { 
+.game-loading-container > h1 {
   display: none;
   font-size: 4rem;
+  color: #fff;
+  font-weight: 400;
+  margin-bottom: 4rem;
 }
+
+
 .game-loading-container__title:first-child { 
   padding-top: 50vh;
   margin-top: -10.4rem;
 }
+
+/*
+ * LEVEL TITEL -- LOADING PAGE --
+*/
 
 .loading-cell { 
   display: inline-block;
@@ -92,14 +80,14 @@ h1 {
 }
 
 .level-loading-container { 
+  display: block;
   position: absolute;
   top: 0;
   left: 0;
-  background-color: #60c5d7;
   width: 100vw;
   height: 100vh;
-  display: block;
   z-index: 9999;
+  background-color: #60c5d7;
 }
 
 .level-loading-container .level { 
@@ -108,9 +96,10 @@ h1 {
   margin-left: 10vw;
   width: 80vw;
   height: 28vh;
-  padding-top: 12vh;
+  padding-top: 14vh;
   border-top: 1px solid #fff;
   border-bottom: 1px solid #fff;
+  
   /* Font Styles */
   font-size: 2rem;
   font-weight: 100;
@@ -120,30 +109,33 @@ h1 {
  }
 
 .levelTarget {
+  /* Positioning */
+  display: inline-block;
   margin-top: 2rem;
   border-top: 1px solid #313644;
-  display: inline-block;
+  
+  /* Font Styles */
   font-size: 1.4rem;
   text-transform: none;
 }
 
-.levelTarget p:first-child { 
-  margin-top: 2rem;
-}
+.levelTarget p:first-child { margin-top: 2rem; }
+
 .levelTarget p {     
   color: #313644;
   font-weight: 400;
 }
 
+
 /*
-* GAME SCREEN
+ * GAME SCREEN
 */
 .game-container {
   position: absolute;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
   z-index: 99999;
 }
 
@@ -154,12 +146,12 @@ h1 {
  }
 
 /* Header */
- .game-header {
-   width: 100%;
-   height: 6.25rem;
-   background-color: #141413;
-   position: relative;
-  }
+.game-header {
+  width: 100vw;
+  height: 10vh;
+  background-color: #141413;
+  position: relative;
+}
 
 /* Arrow */
 .arrow-up {
@@ -175,18 +167,10 @@ h1 {
 
 /* Next colors */
 .next-colors { 
-  float:left;
-  padding-top: 5.625%;
-  padding-left: 4.0625%;  
-  width: 27.495%;
-  height: 100%;
-
-  /*position: absolute;
-  top: 50%;
-  margin-top: -4.08%;
+  position: absolute;
+  top: 25%;
   left: 4.0625%;
   width: 27.495%;
-  height: 100%;*/
 }
 
 .color-list {
@@ -198,17 +182,18 @@ h1 {
 .preview-cell {
   float: left;
   margin-right: 3.7907595779%;
-  height: 2.55rem;
-  width: 2.55rem;
+  height: 4.489436619vh;
+  width: 4.489436619vh;
 }
 
 /* Level achivement and target */
 .level-goal { 
   color: #fff;
   font-size: 1.2rem;
-  float: left;
   font-style: italic;
-  margin-top: 7.5%;
+  position: absolute;
+  left: 31vw;
+  top: 33.0078125%;
  }
 
 .thin-line { 
@@ -220,20 +205,20 @@ h1 {
 
 /* Menu */
 .back-to-menu { 
-  float: right;
-  margin-right: 1.5rem;
-  width: 2.8rem;
-  height: 2.8rem;
+  position: absolute;
+  width: 4.92957746479vh;
+  height: 4.92957746479vh;
+  top: 25%;
+  right: 4.6875vw;
   background-color: #232322;
-  margin-top: 5.625%;
 }
 
 .back-to-menu a:link,
 .back-to-menu a:visited,
 .back-to-menu a:hover,
 .back-to-menu a:active {
-  width: 2.8rem;
-  height: 2.8rem;
+  width: 4.92957746479vh;
+  height: 4.92957746479vh;
   display: block;
   font-size: 2rem;
   font-weight: 300;
@@ -249,28 +234,31 @@ h1 {
 /* BOARD */
 .game-board-container {
   background-color: #e7e5e7;
-  padding: 3.5rem 0.5rem;
+  padding-top: 6.161971831vh;
 }
 
 .board {
   background-color: #fff;
-  height: 43.3rem;
-  width: 31rem;
+  height: 76.41vh;
+  width: 96.875vw;
+  margin: 0 auto;
 }
 
 .cell {
   float: left;
-  height: 6.2rem;
-  width: 6.2rem;
+  height: 19.375vw;
+  width: 19.375vw;
   position: relative;
 }
 
 .current {
-  height: 0.9rem;
-  width: 0.9rem;
+  height: 12.5%;
+  width: 12.5%;
   border-radius: 50%;
   border: 1px solid #fff;
-  margin: 2.55rem 2.55rem;
+  position: absolute;
+  top: 42%;
+  left: 42%;
 }
 
 .won,
@@ -295,7 +283,7 @@ h1 {
   font-size: 1.6rem;
   font-weight: 100;
   position: absolute;
-  top: -72%;
+  top: -60%;
   z-index: 999;
   padding: 1rem;
 }
@@ -375,7 +363,7 @@ h1 {
 /* Size of the third info bubble */
 .info.third-info { 
   width: 12rem;
-  top: -48%;
+  top: -34%;
 }
 
 .info.left.third-info::before { right: 10rem; }

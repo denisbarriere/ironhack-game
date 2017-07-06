@@ -408,12 +408,41 @@ function Level(level) {
  * Manage all the data and function required to handle the board
  */
 
+/**
+ * FUNCTION: Calculate the dimension of the board and cells based on level params 
+ **/
+Level.prototype.setBoardSize = function() {
+  /*  ADAPT THE BOARD SIZE TO THE DEVICE  */
+  // get the board dimensions
+  var boardHeight = $('.board').height();
+  var boardWidth = $('.board').width();
+
+  // Calculate the ratio
+  var boardRatio = this.width / this.height;
+
+  // Calculate the board width based on the height and the board ratio
+  boardWidth = boardHeight * boardRatio;
+
+  // Calculate the size of the cells
+  var cellHeight = boardHeight / this.height;
+  var cellWidth = boardWidth / this.width;
+
+  // Set the board width
+  $('.board').width(boardWidth);
+
+  // Set the cell size
+  $('.cell').height(cellHeight);
+  $('.cell').width(cellWidth);
+}
+
 /*
  * FUNCTION: Initialise a new level
  * PARAMETERS: Player object
  * RETURNS: Undefined
  */
 Level.prototype.initLevel = function(player) { 
+
+  /* BUILD THE BOARD */
   var currentIteration;
 
   // Create the HTML board, cell by cell, based on the level properties
@@ -834,8 +863,6 @@ function Game() {
   this.level = new Level(level1Properties);
   this.level.initLevel(this.player);
 
+  // Resize the boad automatically when the user resize the view
+  $( window ).resize(this.level.setBoardSize);
 }
-
-/*
- * GAME FUNCTIONS
- */
