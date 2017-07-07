@@ -1,19 +1,20 @@
-/*
+/**
  * DEFINE: Each level properties
- */
+**/
 
-/*
- * COLORS
- */
+/**
+ * GLOBAL COLORS
+**/
 const availableColor = [
   'blue',
   'grey',
   'red'
 ];
 
-/*
+
+/**
  * LEVEL PROPERTIES
- */
+**/
 
 // LEVEL 1
 const level1Properties = { 

@@ -551,13 +551,13 @@ Level.prototype.assignControlsToKeys = function(player) {
 };
 
 
-/*
- * FUNCTION: 
- * PARAMETERS: 
- * RETURNS: 
- */
-// Function used to clear the board
+/**
+ * FUNCTION: Clear the board on the page and clean level data at level reset
+ * PARAMETERS: None
+ * RETURNS: Undefined
+**/
 Level.prototype.clearLevel = function() {
+  
   // Reset the Level Object
   this.nextColorsQueue = [];
 
@@ -569,15 +569,20 @@ Level.prototype.clearLevel = function() {
   
   // Clear the board on the screen
   $('.board > .cell').remove();
-}
+
+};
+
 
 /*
- * FUNCTION: 
- * PARAMETERS: 
- * RETURNS: 
+ * FUNCTION: Clear the player information on the page 
+ * PARAMETERS: 1. Player Object: to clear
+ *             2. Boolean: Used as a flag to know if we are reseting the level (true) or just refreshing the page (no second param)
+ * RETURNS: Undefined
  */
 // Clear the player from the board
 Level.prototype.clearPlayer = function(player, clearAllPlayerData) {
+
+  // If the second paramater is true, then we are reseting the level, so clear ALL player data
   if (clearAllPlayerData) {
     // Reset the player object (related to the level)
     player.activeCells = [];
@@ -602,17 +607,18 @@ Level.prototype.clearPlayer = function(player, clearAllPlayerData) {
   // Clear the next colors
   $('.color-list li').removeAttr('class');
   $('.color-list li').addClass('preview-cell');
+
 };
 
-/*
- * FUNCTION: 
- * PARAMETERS: 
+
+/**
+ * FUNCTION: Draw all the player moves (steps) since the level started
+ * PARAMETERS: 1. Player Object: Used to retrieve the player information (position, direction...)
  * RETURNS: 
- */
-// Draw player
+**/
 Level.prototype.drawPlayer = function(player) {
 
-  // Draw each active cell
+  // For each active cell, draw the cell on the page
   for (var index = 0 ; index < player.activeCells.length; index += 1) {
       
       // Find the cell to update on the board
@@ -660,42 +666,50 @@ Level.prototype.drawPlayer = function(player) {
 
 };
 
-/*
- * FUNCTION: 
- * PARAMETERS: 
- * RETURNS: 
- */
-// Update display
-Level.prototype.update = function(player) {
-  
-  player.move(this);  
-  this.clearPlayer(player);
-  // ion.sound.play("branch_break"); // play sound
-  this.drawPlayer(player);
-}
 
-/*
- * FUNCTION: 
- * PARAMETERS: 
- * RETURNS: 
-*/
-// Function used to update the next 3 colors available on the level screen
+/**
+ * FUNCTION: Update the next 3 colors in the level header
+ * PARAMETERS: None
+ * RETURNS: Undefined
+**/
 Level.prototype.updateColorList = function() {
-  // Loop over the first three elements on the array and display them
+ 
+  // Loop over the first three elements of the array and display them in the page
   for (var index = 0; index < 3; index += 1) {
       $('.color-list li:nth-child(' + (index + 1) + ')').addClass(this.nextColorsQueue[index]);
   }
+
 };
 
 
-/*
- * FUNCTION: Removes the current bubble and display the next one
+/**
+ * FUNCTION: 
+ * PARAMETERS: 1. Player Object: Used for cleaning and drawing the player again on the page 
+ * RETURNS: Undefined
+**/
+Level.prototype.update = function(player) {
+  
+  // Process player move request
+  player.move(this);  
+
+  // Clear the player moves on the board  
+  this.clearPlayer(player);
+
+  // Draw the player moves (now, including the new elements from the move request)
+  this.drawPlayer(player);
+
+};
+
+
+/**
+ * FUNCTION: Removes the current information bubble and display the next one (i.e. in level 1)
  * PARAMETERS: If none, the function will only clear the last information bubble. Else, the function takes 3 parameteres:
  *  1. message: The message to display
  *  2. infoNumber: The number of the message to display
  *  3. reference to the Player object
-*/
+**/
 Level.prototype.showBubble = function(message, infoNumber, player) {
+ 
   // Remove the previous bubble
   $('.info').remove();
          
@@ -745,124 +759,134 @@ Level.prototype.showBubble = function(message, infoNumber, player) {
         console.log("Unexpected cell color: ", player.currentCell.color);
     };
   }
-}; 
+
+};
 
 
-/*
- * FUNCTION: 
- * PARAMETERS: 
- * RETURNS: 
- */
-// Function that resets the level
-Level.prototype.resetLevel = function(player) {
-  this.clearPlayer(player, true);
-  this.clearLevel();
-  // Remove the key event lister
-  $('body').off("keydown");
+/**
+ * FUNCTION: Lost Level. This function is called when a user got stuck in a level
+ * PARAMETERS: 1. Player Object: Used to retrieve the position of the current cell
+ * RETURNS: Undefined
+**/
+Level.prototype.lost = function(player) {
   
+  // First, prevent users from moving more
+  $('body').off('keydown');
+  
+  // Delete the 'o' icon after a little delay
+  setTimeout(function() { $('.current').remove(); }, 10 );
+ 
+  // Change the current cell icon from 'o' 'x'
+  var selector = '[data-row=' + player.currentCell.row + ']' +
+                 '[data-col=' + player.currentCell.column + ']';
+  $(selector).append($('<div>').addClass('lost'));
+  $('.lost').html("&#9587;");
+  
+  // Ask what the user wants to do now (after a small delay)
+  var timeoutId = setTimeout(function() {
+
+    var userChoice = confirm("Too bad, you just lost! Wanna retry?");
+
+    // OK: RETRY, then reset the game
+    if ( userChoice ) {
+      console.log("Cool, let's roll!");
+      this.resetLevel(player);
+    // KO: END the game
+    } else {
+      this.endLevel();
+    }
+  }.bind(this), 400);
+
+};
+
+
+/**
+ * FUNCTION: Win Level. This function is called when a user completed the level target
+ * PARAMETERS: 1. Player Object: Used to retrieve the position of the current cell
+ * RETURNS: Undefined
+**/
+Level.prototype.win = function(player) {
+
+  // First, prevent users from moving more
+  $('body').off('keydown');
+
+  // Delete the 'o' icon after a little delay
+  setTimeout(function() { $('.current').remove(); }, 10 );
+ 
+  // Change the current cell icon from 'o' '+'
+  var selector = '[data-row=' + player.currentCell.row + ']' +
+                 '[data-col=' + player.currentCell.column + ']';
+  $(selector).append($('<div>').addClass('won'));
+  $('.won').html("&#9532;");
+  
+  // Change the current cell background with animation
+  $(selector).animate({ backgroundColor: "#000"}, 100 );
+  
+  // Ask what the user wants to do now (after a small delay)
+  var timeoutId = setTimeout(function() {
+
+    var userChoice = confirm("Wow, you rock! Wanna replay this level?");
+    
+    // OK: RETRY, then reset the game
+    if ( userChoice ) {
+      console.log("Cool, let's roll!");
+      this.resetLevel(player);
+    // KO: END the game
+    } else {
+      this.endLevel();
+    }
+  }.bind(this), 400);
+
+};
+
+
+/**
+ * FUNCTION: Resets a level
+ * PARAMETERS: 1. Player Object: Used to reset the player in the level
+ * RETURNS: undefined
+**/
+Level.prototype.resetLevel = function(player) {
+  
+  // Remove the player from the level
+  this.clearPlayer(player, true);
+
+  // Remove all the level elements and clean all level data
+  this.clearLevel();
+
+  // Re-initialise the level  
   this.initLevel(player);
-}
+
+};
 
 
-/*
- * FUNCTION: 
- * PARAMETERS: 
- * RETURNS: 
- */
-// Function that ends the level
+/**
+ * FUNCTION: Ends the game
+ * PARAMETERS: 1. Player Object: Used to delete the player in the level
+ * RETURNS: undefined
+**/
 Level.prototype.endLevel = function(player) {
+  
+  // Display good bye message 
   timeoutId = setTimeout(function() { 
     alert("OK, see you around.")
   }, 200);
 
-  // Remove the key event lister
-  $('body').off("keydown");
-}
+};
 
 
-/*
- * FUNCTION: 
- * PARAMETERS: 
- * RETURNS: 
- */
-// Function handling when a user lost the level
-Level.prototype.lost = function(player) {
-  // A little delay is required to delete the current icon
-  setTimeout(function() { $('.current').remove(); }, 10 );
- 
-  // Change the current icon to the lost on
-  var selector = '[data-row=' + player.currentCell.row + ']' +
-                 '[data-col=' + player.currentCell.column + ']';
-
-  // Draw the lost icon on the current cell
-  $(selector).append($('<div>').addClass('lost'));
-  $('.lost').html("&#9587;");
-  
-  // Ask the user what they want to do after a few seconds
-  var timeoutId = setTimeout(function() {
-    var userChoice = confirm("Too bad, you just lost! Wanna retry?");
-    // If the user wants to retry, reset everything
-    if ( userChoice ) {
-      console.log("Cool, let's roll!");
-      this.resetLevel(player);
-
-    } else {
-      this.endLevel();
-    }
-  }.bind(this), 400);
-}
-
-
-/*
- * FUNCTION: 
- * PARAMETERS: 
- * RETURNS: 
- */
-// Function handling when a user win the level
-Level.prototype.win = function(player) {
-  // A little delay is required to delete the current icon
-  setTimeout(function() { $('.current').remove(); }, 10 );
- 
-  // Change the current icon to the lost on
-  var selector = '[data-row=' + player.currentCell.row + ']' +
-                 '[data-col=' + player.currentCell.column + ']';
-
-  $(selector).animate({ backgroundColor: "#000"}, 100 );
-  
-  // Draw the lost icon on the current cell
-  $(selector).append($('<div>').addClass('won'));
-  $('.won').html("&#9532;");
-  
-  // Ask the user what they want to do after a few seconds
-  var timeoutId = setTimeout(function() {
-    var userChoice = confirm("Wow, you rock! Wanna replay this level?");
-    // If the user wants to retry, reset everything
-    if ( userChoice ) {
-      console.log("Cool, let's roll!");
-      this.resetLevel(player);
-
-    } else {
-      this.endLevel();
-    }
-  }.bind(this), 400);
-}
-
-
-/* 
+/** 
  * OBJECT: GAME
- * Initiate the game main objects
- */
-
-// Constructor
+**/
 function Game() {
   
   // Initialise the Player Object
   this.player = new Player();
 
-  // Initialise the Level Object, based on level 1 properties
+  // Initialise the Level Object to the first level for a start
   this.level = new Level(level1Properties);
   this.level.initLevel(this.player);
 
-  // Resize the boad automatically when the user resize the view
+  // Resize the boad automatically when the user resizes the view
   $( window ).resize(this.level.setBoardSize);
+
 }

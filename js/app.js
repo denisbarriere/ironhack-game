@@ -5,6 +5,9 @@ var game;
 $(document).ready(function() {
 $('.game-container').show(); // FOR TESTING TO REMOVE
   
+  /**
+   *  GAME INIT: Animation showing the game title, then the level title and finally level 1 board
+  **/
   // At first, hide everything
   // $('.game-container').hide();
 
