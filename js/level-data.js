@@ -22,8 +22,7 @@ const level1Properties = {
   width: 5,
   height : 7,
   initState : [{ row: 3, column: 2, color: 'blue', current: true }],
-  nextColorsQueue : ['grey','blue','blue'],  
-  // nextColorsQueue : ['grey','blue','grey','blue','grey','grey','blue','grey','blue','blue','grey','blue','blue','blue','grey','blue','grey','grey','grey','grey','blue','grey','grey'],
+  nextColorsQueue : ['grey','blue','grey','blue','grey','grey','blue','grey','blue','blue','grey','blue','blue','blue','grey','blue','grey','grey','grey','grey','blue','grey','grey'],
   success : 15
 }
 

@@ -88,7 +88,7 @@ Player.prototype.move = function (level) {
   this.clearActiveMatches();
 
   // Tells if a user can move or not
-  var isStuck = false;
+  let isStuck = false;
 
   // Define the next cell, based on direction
   this.setNextCell(level);
@@ -102,7 +102,7 @@ Player.prototype.move = function (level) {
     this.nbMoves += 1;
 
     // The move request is valid, so we should save it
-    var currentValidMove = {
+    let currentValidMove = {
       row: this.nextCell.row,
       column: this.nextCell.column,
       color: this.nextCell.color,
@@ -129,7 +129,7 @@ Player.prototype.move = function (level) {
     if (this.nbMoves === 5 && level.number === 1) { this.showBubble(); }
 
     // Calculate the number of cells of the same color (the new current cell color) are touching
-    var nbMatches = this.getNbMatches(level);
+    let nbMatches = this.getNbMatches(level);
     
     // If the next position makes 3 cells of the same color touching,
     // it means we have a color match
@@ -142,7 +142,7 @@ Player.prototype.move = function (level) {
       this.levelScore += nbMatches;
 
       // Play the match sound
-      var audioMatch = new Audio('./sounds/366102__original-sound__confirmation-upward.wav');
+      let audioMatch = new Audio('./sounds/366102__original-sound__confirmation-upward.wav');
       audioMatch.play();
 
       // If the Player score if greater or equal to the level goal,
@@ -204,7 +204,7 @@ Player.prototype.move = function (level) {
 Player.prototype.clearMatches = function() {
 
   // Loop over the whole activeCells array
-  for (var index = this.activeCells.length -1; index >= 0; index -= 1) { 
+  for (let index = this.activeCells.length -1; index >= 0; index -= 1) { 
     
     // if the matched flag is present and the cell is not the current one   
     if ( this.activeCells[index].matched && !this.activeCells[index].current ) {
@@ -276,10 +276,10 @@ Player.prototype.isCellInBoard = function (cell, level) {
 Player.prototype.isFreeCellAround = function (cell, level) {
   
   // Set the values of the cells around
-  var upCell    = { row: cell.row - 1, column: cell.column     };
-  var rightCell = { row: cell.row    , column: cell.column + 1 };
-  var downCell  = { row: cell.row + 1, column: cell.column     };
-  var leftCell  = { row: cell.row    , column: cell.column - 1 };
+  let upCell    = { row: cell.row - 1, column: cell.column     };
+  let rightCell = { row: cell.row    , column: cell.column + 1 };
+  let downCell  = { row: cell.row + 1, column: cell.column     };
+  let leftCell  = { row: cell.row    , column: cell.column - 1 };
 
   // Return TRUE if, at least, one cell around (up, right, down or left) is free
   if (  (this.isCellFree(upCell) && this.isCellInBoard(upCell, level)) ||
@@ -353,7 +353,7 @@ Player.prototype.isSameColor = function(cell1Index, cell2Index) {
 Player.prototype.getActiveCellIndex = function(cell) {
 
   // Find the first cell matching the row and column from the "activeCells" array
-  var indexToReturn = this.activeCells.find(function(element) {
+  let indexToReturn = this.activeCells.find(function(element) {
      return element.row === cell.row && element.column === cell.column
   });
 
@@ -381,26 +381,26 @@ Player.prototype.getActiveCellIndex = function(cell) {
 Player.prototype.touchWithColor = function(cell) {
 
   // Set the values of the cells around
-  var upCell    = { row: cell.row - 1, column: cell.column     };
-  var rightCell = { row: cell.row    , column: cell.column + 1 };
-  var downCell  = { row: cell.row + 1, column: cell.column     };
-  var leftCell  = { row: cell.row    , column: cell.column - 1 };
+  let upCell    = { row: cell.row - 1, column: cell.column     };
+  let rightCell = { row: cell.row    , column: cell.column + 1 };
+  let downCell  = { row: cell.row + 1, column: cell.column     };
+  let leftCell  = { row: cell.row    , column: cell.column - 1 };
   
   // Get cells index from the "activeCells" array
-  var cellIndex = this.getActiveCellIndex(cell);
-  var upCellIndex = this.getActiveCellIndex(upCell);
-  var rightCellIndex = this.getActiveCellIndex(rightCell);
-  var downCellIndex = this.getActiveCellIndex(downCell);
-  var leftCellIndex = this.getActiveCellIndex(leftCell);
+  let cellIndex = this.getActiveCellIndex(cell);
+  let upCellIndex = this.getActiveCellIndex(upCell);
+  let rightCellIndex = this.getActiveCellIndex(rightCell);
+  let downCellIndex = this.getActiveCellIndex(downCell);
+  let leftCellIndex = this.getActiveCellIndex(leftCell);
    
   // This array inclues objects storing the test results clockwise (0: result of test up, 1: result of test right, 2: result of test down, 3: result of test left)  
-  var objToReturn = [];
+  let objToReturn = [];
 
   // Variables store the return values of the 'Player.isSameColor' function in the four directions, clockwise (up, right, down, left)
-  var isUpCellSameColor = this.isSameColor(cellIndex, upCellIndex);
-  var isRightCellSameColor = this.isSameColor(cellIndex, rightCellIndex);
-  var isDownCellSameColor = this.isSameColor(cellIndex, downCellIndex);
-  var isLeftCellSameColor = this.isSameColor(cellIndex, leftCellIndex);
+  let isUpCellSameColor = this.isSameColor(cellIndex, upCellIndex);
+  let isRightCellSameColor = this.isSameColor(cellIndex, rightCellIndex);
+  let isDownCellSameColor = this.isSameColor(cellIndex, downCellIndex);
+  let isLeftCellSameColor = this.isSameColor(cellIndex, leftCellIndex);
   
   // Checks if two cells are touching and have the same color 
   if ( this.isActive(upCell) && isUpCellSameColor !== false ) { objToReturn.push(isUpCellSameColor); }  // UP
@@ -432,7 +432,7 @@ Player.prototype.touchWithColor = function(cell) {
 Player.prototype.findAllMatches = function (cell) {
   
   // Test for touching cells with the same color
-  var isTouchingWithSameColor = this.touchWithColor(cell);
+  let isTouchingWithSameColor = this.touchWithColor(cell);
   
   // If cells are touching with the same color 
   if ( isTouchingWithSameColor.length > 0 ) {
@@ -465,7 +465,7 @@ Player.prototype.findAllMatches = function (cell) {
 Player.prototype.clearActiveMatches = function() {
 
   // Loop over the "activeCells" array
-  for (var index = 0; index < this.activeCells.length; index += 1) {
+  for (let index = 0; index < this.activeCells.length; index += 1) {
 
     // Reset the .alreadyChecked and .matched flags to FALSE
     this.activeCells[index].alreadyChecked = false;
@@ -484,9 +484,9 @@ Player.prototype.clearActiveMatches = function() {
 **/
 Player.prototype.countMatches = function() {
  
-  var counter = 0;
+  let counter = 0;
   // Loop over the "activeCells" array 
-  for (var index = 0; index < this.activeCells.length; index += 1) {
+  for (let index = 0; index < this.activeCells.length; index += 1) {
     // If the matched flag is set to TRUE, increase the counter
     if ( this.activeCells[index].matched ) {
       counter += 1;
@@ -512,7 +512,7 @@ Player.prototype.getNbMatches = function(level) {
   this.findAllMatches(this.activeCells[this.activeCells.length - 1]);
   
   // Count the number of cells with the same color as the current one
-  var count = this.countMatches();
+  let count = this.countMatches();
   
   // Return the number of matches
   return count;
@@ -539,21 +539,24 @@ Player.prototype.showBubble = function(message, infoNumber, level) {
   if (arguments.length > 0) {
 
     // First convert the infoNumber to target the proper CSS class
-    var infoOrder = "";
+    let infoOrder = "";
+    let headerPosition = false; // Variable used to flag the info bubbles to be displayed in the header
+    let selector; // Variable used to select a cell on the board
+
     if ( infoNumber === 2 ) { infoOrder = "second"; } 
     if ( infoNumber === 3 ) { infoOrder = "third"; }
-    if ( infoNumber === 4 ) { infoOrder = "fourth"; var headerPosition = true; }
+    if ( infoNumber === 4 ) { infoOrder = "fourth"; headerPosition = true; }
     if ( infoNumber === 5 ) { infoOrder = "fifth"; }     
 
     // And display the second one
     if ( !headerPosition ) {
-      var selector = '[data-row=' + this.currentCell.row + ']' +
-                      '[data-col=' + this.currentCell.column + ']';
+      selector = '[data-row=' + this.currentCell.row + ']' +
+                 '[data-col=' + this.currentCell.column + ']';
 
     // If headerPosition flag is true, then position the info bubble based on the header, not the current cell
     } else {
-      var selector = '[data-row=0]' +
-                     '[data-col=0]';
+      selector = '[data-row=0]' +
+                 '[data-col=0]';
     }
 
     // Then display the second bubble
@@ -562,7 +565,7 @@ Player.prototype.showBubble = function(message, infoNumber, level) {
     $('.info').fadeIn(400);
     
     // Position the bubble based on the move direction
-    var columnSide = Math.ceil(level.width / 2);
+    let columnSide = Math.ceil(level.width / 2);
      
     if ( this.currentCell.column >= columnSide && !headerPosition ) {
       $('.info').addClass('right');
@@ -606,7 +609,7 @@ function Level(level) {
   this.success = level.success; // Success value. e.g the number of matches to do to win the level
 
   // Initialise the nextColorsQueue (the next 3 colors displayed above the board)
-  for (var index = 0; index < level.nextColorsQueue.length; index += 1) {
+  for (let index = 0; index < level.nextColorsQueue.length; index += 1) {
     this.nextColorsQueue.push(level.nextColorsQueue[index]);
   }
 
@@ -632,6 +635,7 @@ Level.prototype.setBoardHeaderSize = function() {
   console.log("here");
 
   // Level goal
+  
 
   // ? CTA
 
@@ -648,15 +652,15 @@ Level.prototype.setBoardHeaderSize = function() {
 Level.prototype.setBoardSize = function() {
 
   // get the viewport dimensions
-  var viewportWidth = $(window).width();
-  var viewportHeight = $(window).height();
+  let viewportWidth = $(window).width();
+  let viewportHeight = $(window).height();
 
   // get the board dimensions
-  var boardWidth = $('.board').width();
-  var boardHeight = viewportHeight * ( 76.41 / 100 );
+  let boardWidth = $('.board').width();
+  let boardHeight = viewportHeight * ( 76.41 / 100 );
  
   // Calculate the ratio
-  var boardRatio = this.width / this.height;
+  let boardRatio = this.width / this.height;
 
   // Calculate the board width based on the height and the board ratio
   boardWidth = boardHeight * boardRatio;
@@ -684,7 +688,7 @@ Level.prototype.setBoardSize = function() {
    }
 
   // Calculate CSS left property to center the board
-  var boardLeftCSSProperty = ( ( 
+  let boardLeftCSSProperty = ( ( 
     ( viewportWidth - boardWidth ) /* Get the width space remaining on the screen */
     / 2 ) /* Devide the remaining by two to know how much to have left and right of the board */
     / viewportWidth ) * 100 ; /* Finally, convert this to a percentage */
@@ -693,8 +697,8 @@ Level.prototype.setBoardSize = function() {
   $('.board').css('left', boardLeftCSSProperty + '%');
 
   // Calculate the size of the cells
-  var cellWidth = boardWidth / this.width; 
-  var cellHeight = boardHeight / this.height; 
+  let cellWidth = boardWidth / this.width; 
+  let cellHeight = boardHeight / this.height; 
 
   // Set the cell size
   $('.cell').width(cellWidth + 'px'); 
@@ -708,17 +712,18 @@ Level.prototype.setBoardSize = function() {
  * PARAMETERS: 1. Player object
  * RETURNS: undefined
  * DEPENDENCIES: + Level.setBoardSize()
+ *               + Level.setBoardHeaderSize()
  *               + Level.drawPlayer(Player)
  *               + Level.assignControlsToKeys(Player)
  */
 Level.prototype.initLevel = function(player) { 
   
   /* BUILD THE BOARD */
-  var currentIteration;
+  let currentIteration;
 
   // Create the HTML board, cell by cell, based on the level properties
-  for (var row = 0; row < this.height; row +=1 ) {
-    for (var column = 0; column < this.width; column +=1 ) {
+  for (let row = 0; row < this.height; row +=1 ) {
+    for (let column = 0; column < this.width; column +=1 ) {
       $('.board').append($('<div>')
         .addClass('cell')
         .attr('data-row', row)
@@ -730,7 +735,7 @@ Level.prototype.initLevel = function(player) {
   // For each cell in the initialState array:
   // Push it to the activeCells array, in order to draw
   // Set the currentCell
-  for (var index = 0 ; index < this.initState.length; index += 1) {
+  for (let index = 0 ; index < this.initState.length; index += 1) {
     currentIteration = {
         row: this.initState[index].row,
         column: this.initState[index].column,
@@ -744,7 +749,7 @@ Level.prototype.initLevel = function(player) {
     
       // Add the information bubble, at level init, only at level 1
       if (this.number === 1 ) {
-        var selector = '[data-row=' + player.currentCell.row + ']' +
+        let selector = '[data-row=' + player.currentCell.row + ']' +
                        '[data-col=' + player.currentCell.column + ']';
         
         $(selector).append($('<div>').addClass('info left first-info'));
@@ -756,6 +761,9 @@ Level.prototype.initLevel = function(player) {
     // Push the item to the activeCells array
     player.activeCells.push(currentIteration);
   } 
+
+  // Set the board header size on the page
+  this.setBoardHeaderSize();
 
   // Set the board and cell size on the page
   this.setBoardSize();
@@ -785,8 +793,8 @@ Level.prototype.updatNextColorQueue = function() {
   // If not enough colors are remaining, then push the inital set of colors back  
   if ( this.nextColorsQueue.length < 3 ) {
       
-    var levelProperties = eval("level"+this.number+"Properties");
-    for (var index = 0; index < levelProperties.nextColorsQueue.length; index += 1) {
+    let levelProperties = eval("level"+this.number+"Properties");
+    for (let index = 0; index < levelProperties.nextColorsQueue.length; index += 1) {
       this.nextColorsQueue.push(levelProperties.nextColorsQueue[index]);
     }
   }
@@ -847,7 +855,7 @@ Level.prototype.assignControlsToKeys = function(player) {
   $('body').on('keydown', function(e) {
     
     // Get the key pressed
-    var action = e.keyCode;
+    let action = e.keyCode;
 
     if( e.keyCode === 38 ||
         e.keyCode === 40 ||
@@ -865,7 +873,7 @@ Level.prototype.assignControlsToKeys = function(player) {
   $('body').on('swipe', function(e, touch) {
 
     // Get the swipe direction
-    var action = touch.direction;
+    let action = touch.direction;
 
     // Perform game action based on the swipe direction
     this.matchUserInputToGameActions(action, player);
@@ -887,9 +895,9 @@ Level.prototype.clearLevel = function() {
   this.nextColorsQueue = [];
 
   // Reset the colorQueue to its initial value
-  var levelProperties = eval("level"+this.number+"Properties");
+  let levelProperties = eval("level"+this.number+"Properties");
 
-  for (var index = 0; index < levelProperties.nextColorsQueue.length; index += 1) {
+  for (let index = 0; index < levelProperties.nextColorsQueue.length; index += 1) {
     this.nextColorsQueue.push(levelProperties.nextColorsQueue[index]);
   }
   
@@ -947,10 +955,10 @@ Level.prototype.clearPlayer = function(player, clearAllPlayerData) {
 Level.prototype.drawPlayer = function(player) {
 
   // For each active cell, draw the cell on the page
-  for (var index = 0 ; index < player.activeCells.length; index += 1) {
+  for (let index = 0 ; index < player.activeCells.length; index += 1) {
       
       // Find the cell to update on the board
-      var selector = '[data-row=' + player.activeCells[index].row + ']' +
+      let selector = '[data-row=' + player.activeCells[index].row + ']' +
                     '[data-col=' + player.activeCells[index].column + ']';
       // Init the color on the board
       $(selector).addClass(player.activeCells[index].color);
@@ -963,16 +971,16 @@ Level.prototype.drawPlayer = function(player) {
         // If the player is next to a cell or a border and going to this direction, don't show animation
         if( !player.cannotMove ) {
           $(selector).hide();
-          if ( player.direction === "up"  ) { $(selector).show('slide',{direction:'down'},2000); } 
-          if ( player.direction === 'right' ) { $(selector).show('slide',{direction:'left'},2000); }
-          if ( player.direction === 'down' ) { $(selector).show('slide',{direction:'up'},2000); }
-          if ( player.direction === 'left' ) { $(selector).show('slide',{direction:'right'},2000); }
+          if ( player.direction === "up"  ) { $(selector).show('slide',{direction:'down'},100); } 
+          if ( player.direction === 'right' ) { $(selector).show('slide',{direction:'left'},100); }
+          if ( player.direction === 'down' ) { $(selector).show('slide',{direction:'up'},100); }
+          if ( player.direction === 'left' ) { $(selector).show('slide',{direction:'right'},100); }
         
           // Fade in for the first cell displayed
           if ( player.direction === undefined) { $(selector).fadeIn(200); } else {
            
             // Play the move sound
-            var audioMove = new Audio('./sounds/branch_break.mp3');
+            let audioMove = new Audio('./sounds/branch_break.mp3');
             audioMove.play();
           }
 
@@ -1005,7 +1013,7 @@ Level.prototype.drawPlayer = function(player) {
 Level.prototype.updateColorList = function() {
  
   // Loop over the first three elements of the array and display them in the page
-  for (var index = 0; index < 3; index += 1) {
+  for (let index = 0; index < 3; index += 1) {
       $('.color-list li:nth-child(' + (index + 1) + ')').addClass(this.nextColorsQueue[index]);
   }
 
@@ -1050,15 +1058,15 @@ Level.prototype.lost = function(player) {
   setTimeout(function() { $('.current').remove(); }, 10 );
  
   // Change the current cell icon from 'o' 'x'
-  var selector = '[data-row=' + player.currentCell.row + ']' +
+  let selector = '[data-row=' + player.currentCell.row + ']' +
                  '[data-col=' + player.currentCell.column + ']';
   $(selector).append($('<div>').addClass('lost'));
   $('.lost').html("&#9587;");
   
   // Ask what the user wants to do now (after a small delay)
-  var timeoutId = setTimeout(function() {
+  let timeoutId = setTimeout(function() {
 
-    var userChoice = confirm("Too bad, you just lost! Wanna retry?");
+    let userChoice = confirm("Too bad, you just lost! Wanna retry?");
 
     // OK: RETRY, then reset the game
     if ( userChoice ) {
@@ -1090,7 +1098,7 @@ Level.prototype.win = function(player) {
   setTimeout(function() { $('.current').remove(); }, 10 );
  
   // Change the current cell icon from 'o' '+'
-  var selector = '[data-row=' + player.currentCell.row + ']' +
+  let selector = '[data-row=' + player.currentCell.row + ']' +
                  '[data-col=' + player.currentCell.column + ']';
   $(selector).append($('<div>').addClass('won'));
   $('.won').html("&#9532;");
@@ -1099,9 +1107,9 @@ Level.prototype.win = function(player) {
   $(selector).animate({ backgroundColor: "#000"}, 100 );
   
   // Ask what the user wants to do now (after a small delay)
-  var timeoutId = setTimeout(function() {
+  let timeoutId = setTimeout(function() {
 
-    var userChoice = confirm("Wow, you rock! Wanna replay this level?");
+    let userChoice = confirm("Wow, you rock! Wanna replay this level?");
     
     // OK: RETRY, then reset the game
     if ( userChoice ) {
