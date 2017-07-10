@@ -24,5 +24,15 @@ $('.game-container').show(); // FOR TESTING TO REMOVE
 
   // //$('.level-loading-container').delay(8000).hide();
   // $('.game-container').delay(3400).fadeIn(400);
+  
+  /**
+   *  GAME INIT: Create a new Game Object
+  **/
   game = new Game();
-});
+
+  /**
+   *  Resize the game automatically when the user resizes the view
+  **/
+  $(window).resize(function() { game.resize(); });
+
+  });

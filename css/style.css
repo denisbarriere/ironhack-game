@@ -243,7 +243,6 @@ body {
   position: fixed;
   width: 96.875vw;
   height: 76.41vh;
-  margin: 0 auto;
   background-color: #fff;
 }
 
@@ -281,14 +280,16 @@ body {
  */
 .info {
   display:none; 
-  color: #fff;
-  background-color: #000;
+  position: absolute;
+  bottom: 80%;
+  padding: 1rem;
+  z-index: 999;
+      height: auto;
+  
   font-size: 1.6rem;
   font-weight: 100;
-  position: absolute;
-  top: -60%;
-  z-index: 999;
-  padding: 1rem;
+  background-color: #000;
+  color: #fff;
 }
 
 /* Increase font size for retina dispalay */
@@ -381,7 +382,8 @@ body {
 
 /* Size of the forth info bubble */
 .info.fourth-info { 
-  width: 6em;
+  width: 12rem;
+  height: 3rem;
   top: -15%;
 }
 
