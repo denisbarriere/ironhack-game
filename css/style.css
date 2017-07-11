@@ -361,7 +361,7 @@ body {
 @media screen and (min-resolution: 2dppx) { 
   /* Get this font size just for retina displays */
   @import url('https://fonts.googleapis.com/css?family=Josefin+Sans:300');
-  font-weight: 300; 
+  font-weight: 400; 
 }
 
 /* position the bubble horizontally on the left or right of the cell */

@@ -460,6 +460,10 @@ Level.prototype.win = function(player) {
   // First, prevent users from moving more
   $('body').off('keydown');
 
+  // Play the level complete sound
+  let audioMatch = new Audio('./sounds/133284__fins__level-completed.wav');
+  audioMatch.play();
+
   // Delete the 'o' icon after a little delay
   setTimeout(function() { $('.current').remove(); }, 10 );
  
@@ -564,11 +568,15 @@ Level.prototype.endLevel = function(player) {
  *               + Level.resetLevel(Player)
  *               + Level.endLevel()
 **/
-Level.prototype.lost = function(player) {
+Level.prototype.loose = function(player) {
   
   // First, prevent users from moving more
   $('body').off('keydown');
   
+  // Play the level lost sound
+  let audioMatch = new Audio('./sounds/370209__jugraf__fail-down.wav');
+  audioMatch.play();
+
   // Delete the 'o' icon after a little delay
   setTimeout(function() { $('.current').remove(); }, 10 );
  

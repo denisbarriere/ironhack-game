@@ -149,7 +149,7 @@ Player.prototype.move = function (level) {
     // It means that the Player is stuck, so he/she lost the level. So we need to end the level
     if ( !this.isFreeCellAround(this.currentCell, level) ) {   
 
-      level.lost(this);
+      level.loose(this);
     
     } 
   
@@ -169,7 +169,7 @@ Player.prototype.move = function (level) {
     // If we are here, it means that there is no cell around, so the game is over
     // This is just a safety, because there is no case identified so far where we would be in this case
     console.log("Do we ever get here?")
-    level.lost(this);
+    level.loose(this);
 
   }
 
