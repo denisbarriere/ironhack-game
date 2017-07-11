@@ -3,7 +3,7 @@
   <head lang="en">
     <title>M Y - F O L T</title>
     <!-- Prevent users from zooming on the page -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0 maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0 maximum-scale=1.0, user-scalable=no minimal-ui">
 
     <!-- CSS Libraries -->
     <link rel="stylesheet" type="text/css" href="./css/style.css" >
@@ -13,15 +13,21 @@
   </head>
   <body>
     <!-- LOADER WRAPPER WITH GAME TITLE -->
-    <div class="game-loading-container">
+    <div class="game-landing-container">
       <h1>
-        <div class="game-loading-container__title">
-          <span class="loading-cell light-green">M</span><span class="loading-cell red">Y</span>
+        <div class="game-landing-container__title">
+          <span class="landing-cell light-green">M</span><span class="landing-cell red">Y</span>
         </div>
-        <div class="game-loading-container__title">
-          <span class="loading-cell blue">F</span><span class="loading-cell red">O</span><span class="loading-cell blue">L</span><span class="loading-cell light-green">T</span>
+        <div class="game-landing-container__title">
+          <span class="landing-cell blue">F</span><span class="landing-cell red">O</span><span class="landing-cell blue">L</span><span class="landing-cell light-green">T</span>
         </div>
       </h1>
+
+      <!-- Play button -->
+      <div class="game-landing-container__menu">
+        <button class="btn game-landing-container__menu--black">Play</button>
+      </div> <!-- end: Play button -->
+
     </div> <!-- end: game-loading-container -->
 
     <!-- Level loader -->
@@ -55,7 +61,7 @@
             <span class="thin-line">&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;</span>
           </div>
           <div class="back-to-menu">
-            <a href="#"><span>?<span></a>
+            <a href="./index.html"><span>?<span></a>
           </div>
         </header>
 

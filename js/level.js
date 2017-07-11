@@ -1,9 +1,12 @@
-/******************************
- *                            * 
- *  OBJECT: Level             *
- *    => Constructor          *
- *                            *
- * ****************************/
+/****************************************
+ *                                      * 
+ *  OBJECT: Level                       *
+ *    => Constructor                    *
+ *                                      *
+ *  PARAMETERS: 1. levelXProperties     *
+ *                 from level-data.js   *
+ *                                      *
+ * **************************************/
 function Level(level) {
 
   this.number = level.number; // e.g. 1 for level1

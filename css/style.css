@@ -34,7 +34,7 @@ body {
   overflow: hidden;
   
   text-align: center;
-  background: radial-gradient( #e0f5e9, #e1f5e8);
+  background: #fff;
 }
 
 .clearfix::after {
@@ -45,9 +45,9 @@ body {
 
 
 /**
- * GAME TITLE -- LOADING SCREEN --
+ * GAME TITLE -- LANDING SCREEN --
 **/
-.game-loading-container { 
+.game-landing-container { 
   /* Positioning */
   display: block;
   width: 100vw;
@@ -58,13 +58,12 @@ body {
   z-index: 99999;
   
   /* Styling */
-  background-color: #fff;
+  background: radial-gradient( #e0f5e9, #e1f5e8);
 }
 
-.game-loading-container > h1 {
+.game-landing-container > h1 {
   /* Positioning */
   display: none;
-  margin-bottom: 4rem;
   
   /* Styling */
   font-size: 4rem;
@@ -72,18 +71,24 @@ body {
   color: #fff;
 }
 
-.game-loading-container__title:first-child { 
+.game-landing-container__title:first-child { 
   /* Positioning */
   margin-top: -10.4rem;
   padding-top: 50vh;
 }
 
+.game-landing-container__title {
+  /* Animate with keyframe */
+  animation: slideGameLogoUp 1s 1s forwards ease-out;
+}
 
-/**
- * LEVEL TITEL -- LOADING PAGE --
-**/
+/* Logo animation keyframe */
+@keyframes slideGameLogoUp {
+  from { transform: translateY(0) }
+  to { transform: translateY(-10.4rem) }
+}
 
-.loading-cell { 
+.landing-cell { 
   /* Positioning */
   display: inline-block;
   height: 4.5rem;
@@ -91,9 +96,57 @@ body {
   padding-top: 1.7rem;
 }
 
+.game-landing-container__menu {
+  visibility: hidden;
+  opacity: 0;
+  animation: slideMainMenuUp 1s 2s forwards ease-in;
+}
+
+/* Main menu keyframe */
+@keyframes slideMainMenuUp {
+  from { 
+    opacity: 0;
+  }
+  to { 
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+.btn { 
+  /* Positioning */
+  border: none;
+  padding: 1rem 4rem;
+
+  /* Styling */
+  font-size: 1.6rem;
+  font-weight: 100;
+  font-style: italic;
+  text-transform: uppercase;
+  outline: 0;
+}
+
+.btn.game-landing-container__menu--black {
+  width: 12.8rem;
+  color: #fff;
+  background-color: #000;  
+}
+
+.btn.game-landing-container__menu--black:hover,
+.btn.game-landing-container__menu--black:active {
+  cursor: pointer;
+  font-weight: 400;
+ }
+
+
+/**
+ * LEVEL TITEL -- LOADING PAGE --
+**/
+
+
 .level-loading-container { 
   /* Positioning */
-  display: block;
+  display: none;
   width: 100vw;
   height: 100vh;
   position: absolute;
@@ -151,6 +204,7 @@ body {
 **/
 .game-container {
   /* Positioning */
+  display: none;
   width: 100vw;
   height: 100vh;
   position: fixed;
@@ -358,10 +412,12 @@ body {
 }
 
 /* Increase font size for retina dispalay */
-@media screen and (min-resolution: 2dppx) { 
+@media ( -webkit-min-device-pixel-ratio: 2 ), 
+       ( min-resolution: 192dpi ) { 
   /* Get this font size just for retina displays */
   @import url('https://fonts.googleapis.com/css?family=Josefin+Sans:300');
-  font-weight: 400; 
+  font-weight: 300; 
+  color: red;
 }
 
 /* position the bubble horizontally on the left or right of the cell */

@@ -3,36 +3,52 @@
 var game;
 
 $(document).ready(function() {
-$('.game-container').show(); // FOR TESTING TO REMOVE
-  
+
   /**
    *  GAME INIT: Animation showing the game title, then the level title and finally level 1 board
   **/
-  // At first, hide everything
-  // $('.game-container').hide();
 
-  // // First load the loader
-  // $('.game-loading-container > h1').fadeIn(300);
+  // First load the landing page
+  $('.game-landing-container > h1').fadeIn(300);
 
-  // // Then, load the menu
-  // $('.game-loading-container').delay(1200).hide('slide',{direction:'left'},400);
-  
-  // // Finally, load the first level
-  // $('.level-loading-container').delay(3000).animate({ backgroundColor: "#fff"}, 400 );
-  // $('.levelTarget p').delay(3000).animate({ borderTopColor: "#fff", color: "#fff"}, 400 );
-  // $('.levelTarget').delay(3000).animate({ borderTopColor: "#fff"}, 400 );
+  $('.btn.game-landing-container__menu--black').on('click', function() {
+    
+    // Load the menu
+    $('.game-landing-container').delay(200).hide('slide',{direction:'left'},600);
 
-  // //$('.level-loading-container').delay(8000).hide();
-  // $('.game-container').delay(3400).fadeIn(400);
-  
-  /**
-   *  GAME INIT: Create a new Game Object
-  **/
-  game = new Game();
+    // Then, load the first level loading
+    $('.level-loading-container').show();
+    $('.level-loading-container').delay(2200).animate({ backgroundColor: "#fff"}, 600 );
+    $('.levelTarget p').delay(2200).animate({ borderTopColor: "#fff", color: "#fff"}, 600 );
+    $('.levelTarget').delay(2200).animate({ borderTopColor: "#fff"}, 600 );
+
+    // And finally, hide it and show the level board
+    $('.level-loading-container').delay(8000, function() { 
+      $(this).hide(); 
+    });
+    
+    // Create and show the board
+    setTimeout( function () {
+      /**
+       *  GAME INIT: Create a new Game Object
+      **/
+      game = new Game();
+      $('.game-container').show(600);
+      game.resize();
+
+    }, 2400);
+  });
+
 
   /**
    *  Resize the game automatically when the user resizes the view
   **/
-  $(window).resize(function() { game.resize(); });
+  $(window).resize(function() { 
+
+    if ( typeof game !== "undefined" ) {
+      game.resize(); 
+    }
 
   });
+
+});
