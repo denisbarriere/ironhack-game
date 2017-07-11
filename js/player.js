@@ -26,38 +26,23 @@ function Player() {
  *                            *
  * ****************************/
 /**
- * FUNCTION: Find the next cell row and column based on the current position and direction.
- *           This is the cell where the players wants to go
- * PARAMETERS: Level Object
+ * FUNCTION: 
+ * PARAMETERS: 1. Level Object
  * RETURNS: undefined
- * DEPENDENCIES: None
+ * DEPENDENCIES: + Player.move(Level)
+ *               + Player.clearPlayer()
+ *               + Player.drawPlayer(Level)
 **/
-Player.prototype.setNextCell = function (level) {
+Player.prototype.update = function(level) {
   
-  // Depending on the direction, find which is the next cell, where the player wants to move to
-  switch(this.direction) {
-    case 'left':
-      // Get the next position and color
-      this.nextCell = { row: this.currentCell.row, column: this.currentCell.column - 1, color: level.nextColorsQueue[0], current: false };
-      break;
+  // Process player move request
+  this.move(level);  
 
-    case 'right':
-      // Get the next position and color
-      this.nextCell = { row: this.currentCell.row, column: this.currentCell.column + 1, color: level.nextColorsQueue[0], current: false };
-      break;
+  // Clear the player moves on the board  
+  this.clearPlayer();
 
-    case 'up':
-      // Get the next position and color
-      this.nextCell = { row: this.currentCell.row - 1,column: this.currentCell.column, color: level.nextColorsQueue[0], current: false };
-      break;
-
-    case 'down':
-      // Get the next position and color
-      this.nextCell = { row: this.currentCell.row + 1,column: this.currentCell.column, color: level.nextColorsQueue[0], current: false };
-      break;
-    default: 
-      console.log("[log] Player.prototype.move: '" + this.direction + "' direction is not defined");
-  }
+  // Draw the player moves (now, including the new elements from the move request)
+  this.drawPlayer(level);
 
 };
 
@@ -77,7 +62,6 @@ Player.prototype.setNextCell = function (level) {
  *               + Player.clearMatches()
  *               + Level.win(Player)
  *               + Level.lost(Player)
- *               + Player.clearActiveMatches()
  *               + Player.isFreeCellAround(Cell object: { row: <>, column: <> }, Level)
 **/
 Player.prototype.move = function (level) {
@@ -192,25 +176,59 @@ Player.prototype.move = function (level) {
 };
 
 
-/** 
- * FUNCTION: Removes all the matched cells from the 'Player.activeCells' array,
- *           except the current cell
+/**
+ * FUNCTION: Resets all the .alreadyChecked and .matched flags to FALSE,
+ *           for each cell of the "activeCells" array
  * PARAMETERS: None
  * RETURNS: undefined
  * DEPENDENCIES: None
 **/
-Player.prototype.clearMatches = function() {
+Player.prototype.clearActiveMatches = function() {
 
-  // Loop over the whole activeCells array
-  for (let index = this.activeCells.length -1; index >= 0; index -= 1) { 
-    
-    // if the matched flag is present and the cell is not the current one   
-    if ( this.activeCells[index].matched && !this.activeCells[index].current ) {
+  // Loop over the "activeCells" array
+  for (let index = 0; index < this.activeCells.length; index += 1) {
 
-      // Then, remove the cell from the activeCells array
-      this.activeCells.splice(index, 1);
-    
-    }
+    // Reset the .alreadyChecked and .matched flags to FALSE
+    this.activeCells[index].alreadyChecked = false;
+    this.activeCells[index].matched = false;
+  
+  }
+
+};
+
+
+/**
+ * FUNCTION: Find the next cell row and column based on the current position and direction.
+ *           This is the cell where the players wants to go
+ * PARAMETERS: Level Object
+ * RETURNS: undefined
+ * DEPENDENCIES: None
+**/
+Player.prototype.setNextCell = function (level) {
+  
+  // Depending on the direction, find which is the next cell, where the player wants to move to
+  switch(this.direction) {
+    case 'left':
+      // Get the next position and color
+      this.nextCell = { row: this.currentCell.row, column: this.currentCell.column - 1, color: level.nextColorsQueue[0], current: false };
+      break;
+
+    case 'right':
+      // Get the next position and color
+      this.nextCell = { row: this.currentCell.row, column: this.currentCell.column + 1, color: level.nextColorsQueue[0], current: false };
+      break;
+
+    case 'up':
+      // Get the next position and color
+      this.nextCell = { row: this.currentCell.row - 1,column: this.currentCell.column, color: level.nextColorsQueue[0], current: false };
+      break;
+
+    case 'down':
+      // Get the next position and color
+      this.nextCell = { row: this.currentCell.row + 1,column: this.currentCell.column, color: level.nextColorsQueue[0], current: false };
+      break;
+    default: 
+      console.log("[log] Player.prototype.move: '" + this.direction + "' direction is not defined");
   }
 
 };
@@ -221,7 +239,7 @@ Player.prototype.clearMatches = function() {
  * PARAMETERS: 1. Cell object: { row: <>, column: <> }
  * RETURNS: + TRUE if the cell to check does not exists in the activeCells array
  *          + FALSE if the cell to check is found in the activeCells array
- * DEPENDENCIES: 
+ * DEPENDENCIES: None
 **/
 Player.prototype.isCellFree = function (cell) {
   
@@ -259,261 +277,6 @@ Player.prototype.isCellInBoard = function (cell, level) {
   } else { 
     return true;
   }
-
-};
-
-
-/**
- * FUNCTION: Checks if there is any cell around the current cell
- * PARAMETERS: 1. Cell object: { row: <>, column: <> }
- *             2. Level Object
- * RETURNS: + TRUE if there is at least one cell around available (up, right, down or left)
- * DEPENDENCIES: + Player.isCellFree(Cell object: { row: <>, column: <> })
- *               + Player.isCellInBoard(Cell object: { row: <>, column: <> }, Level Object)
-**/
-Player.prototype.isFreeCellAround = function (cell, level) {
-  
-  // Set the values of the cells around
-  let upCell    = { row: cell.row - 1, column: cell.column     };
-  let rightCell = { row: cell.row    , column: cell.column + 1 };
-  let downCell  = { row: cell.row + 1, column: cell.column     };
-  let leftCell  = { row: cell.row    , column: cell.column - 1 };
-
-  // Return TRUE if, at least, one cell around (up, right, down or left) is free
-  if (  (this.isCellFree(upCell) && this.isCellInBoard(upCell, level)) ||
-        (this.isCellFree(rightCell) && this.isCellInBoard(rightCell, level)) ||
-        (this.isCellFree(downCell) && this.isCellInBoard(downCell, level)) ||
-        (this.isCellFree(leftCell) && this.isCellInBoard(leftCell, level))
-  ) { 
-    return true;
-  }
-  
-  // Else, it means that the Player can not move to any direction. The Player is stuck
-  console.log("You are stuck mate :'(");
-
-  // In that case, return FALSE
-  return false;
-
-};
-
-
-/**
- * FUNCTION: Checks if a cell is active (belongs to the activeCells array)
- * PARAMETERS: 1. Cell object: { row: <>, column: <> }
- * RETURNS: + TRUE if the cell is found in the "activeCells" array
- *          + FALSE if the cell is not found in the "activeCells" array
- * DEPENDENCIES: None
-**/
-Player.prototype.isActive = function(cell) {
-
-  // Returns TRUE if cell is found in the active array,
-  // Else FALSE
-  return this.activeCells.some(function (element) { 
-    return element.row == cell.row && element.column == cell.column;
-  }.bind(this));
-
-};
-
-
-/**
-* FUNCTION: Checks if two cells have the same color (based on the "activeCells" array)
- * PARAMETERS: 1. First cell index (index of a cell in the "activeCells" array)
- *             2. Second cell index (index of a cell in the "activeCells" array)
- * RETURNS: + cell2Index if the two cells have the same color
- *          + FALSE if the two cells have a different color or if one of the index is -1
- * DEPENDENCIES: None
-**/
-Player.prototype.isSameColor = function(cell1Index, cell2Index) {
-
-  // Return FALSE if one of the index is -1
-  // The index can be -1 when a cell was not found in the "activeCells" array by the Player.getActiveCellIndex earlier in the code flow
-  if ( cell1Index === -1 || cell2Index === -1 ) {
-    return false;
-  } 
-  
-  // if the color matches, return the cell2 index
-  if ( this.activeCells[cell1Index].color === this.activeCells[cell2Index].color ) {
-    return cell2Index;
-  } else {
-    return false;
-  }
-
-};
-
-
-/**
- * FUNCTION: Returns the index of a cell from the "activeCells" array
- * PARAMETERS: 1. Cell object: { row: <>, column: <> }
- * RETURNS: + Index of the first occurance of the cell, found in the "activeCells" array
- *          + -1 if the cell was not found in the "activeCells" array
- * DEPENDENCIES: None
-**/
-Player.prototype.getActiveCellIndex = function(cell) {
-
-  // Find the first cell matching the row and column from the "activeCells" array
-  let indexToReturn = this.activeCells.find(function(element) {
-     return element.row === cell.row && element.column === cell.column
-  });
-
-  // Return the index of the cell found,
-  // Or return -1 if the cell was not found
-  return this.activeCells.indexOf(indexToReturn);
-
-};
-
-
-/**
- * FUNCTION: Checks if a cell is touching another one with the same color (either up, right, down or left)
- * PARAMETERS: 1. Active Cell Object: { row: <>, column: <>, color: <>, current: <> }
- *                The cell to check
- * RETURNS: + [Array] of objects.
- *            Each object has the following structure:
- *              { cell1: <first cell compared>,
- *                cell2: <second cell compared>,
- *                touch: <true: if the two cells are touching and of the same color, else false>
- *              }
- * DEPENDENCIES: + Player.getActiveCellIndex(Cell Object: { row: <>, column: <> })
- *               + Player.isSameColor(cell1Index, cell2Index)
- *               + Player.isActive(Cell Object: { row: <>, column: <> })
-**/
-Player.prototype.touchWithColor = function(cell) {
-
-  // Set the values of the cells around
-  let upCell    = { row: cell.row - 1, column: cell.column     };
-  let rightCell = { row: cell.row    , column: cell.column + 1 };
-  let downCell  = { row: cell.row + 1, column: cell.column     };
-  let leftCell  = { row: cell.row    , column: cell.column - 1 };
-  
-  // Get cells index from the "activeCells" array
-  let cellIndex = this.getActiveCellIndex(cell);
-  let upCellIndex = this.getActiveCellIndex(upCell);
-  let rightCellIndex = this.getActiveCellIndex(rightCell);
-  let downCellIndex = this.getActiveCellIndex(downCell);
-  let leftCellIndex = this.getActiveCellIndex(leftCell);
-   
-  // This array inclues objects storing the test results clockwise (0: result of test up, 1: result of test right, 2: result of test down, 3: result of test left)  
-  let objToReturn = [];
-
-  // Variables store the return values of the 'Player.isSameColor' function in the four directions, clockwise (up, right, down, left)
-  let isUpCellSameColor = this.isSameColor(cellIndex, upCellIndex);
-  let isRightCellSameColor = this.isSameColor(cellIndex, rightCellIndex);
-  let isDownCellSameColor = this.isSameColor(cellIndex, downCellIndex);
-  let isLeftCellSameColor = this.isSameColor(cellIndex, leftCellIndex);
-  
-  // Checks if two cells are touching and have the same color 
-  if ( this.isActive(upCell) && isUpCellSameColor !== false ) { objToReturn.push(isUpCellSameColor); }  // UP
-  if ( this.isActive(rightCell) && isRightCellSameColor !== false ) { objToReturn.push(isRightCellSameColor); }  // RIGHT
-  if ( this.isActive(downCell) && isDownCellSameColor !== false ) { objToReturn.push(isDownCellSameColor); }  // DOWN
-  if ( this.isActive(leftCell) && isLeftCellSameColor !== false ) { objToReturn.push(isLeftCellSameColor); } // LEFT  
-
-  // Mark the cell as alreadyChecked
-  this.activeCells[cellIndex].alreadyChecked = true;
-
-  if ( objToReturn.length > 0 ) {
-    // Mark the cell as matched
-    this.activeCells[cellIndex].matched = true;
-  }
-
-  // Return the array of matching indexes
-  return objToReturn;
-
-};
-
-
-/**
- * FUNCTION: Finds recursively the cells that are touching in any direction with the same color and flag them as ".matched" (TRUE)
- * PARAMETERS: 1. Active Cell Object: { row: <>, column: <>, color: <>, current: <> }
- *                The cell to chck
- * RETURNS: undefined
- * DEPENDENDIES: + Player.touchWithColor(Active Cell Object: { row: <>, column: <>, color: <>, current: <> })
-**/
-Player.prototype.findAllMatches = function (cell) {
-  
-  // Test for touching cells with the same color
-  let isTouchingWithSameColor = this.touchWithColor(cell);
-  
-  // If cells are touching with the same color 
-  if ( isTouchingWithSameColor.length > 0 ) {
-    
-    // For each cell touching with the same color      
-    isTouchingWithSameColor.forEach(function (element) {
-
-      // if the cell has not been checked already
-      if( !this.activeCells[element].alreadyChecked ) {
-
-        // Mark the cell as matched
-        this.activeCells[element].matched;
-
-        // Recursively check the cell and all following cells that are touching and have the same color
-        this.findAllMatches(this.activeCells[element]);
-      }
-    }.bind(this));
-  } 
-
-};
-
-
-/**
- * FUNCTION: Resets all the .alreadyChecked and .matched flags to FALSE,
- *           for each cell of the "activeCells" array
- * PARAMETERS: None
- * RETURNS: undefined
- * DEPENDENCIES: None
-**/
-Player.prototype.clearActiveMatches = function() {
-
-  // Loop over the "activeCells" array
-  for (let index = 0; index < this.activeCells.length; index += 1) {
-
-    // Reset the .alreadyChecked and .matched flags to FALSE
-    this.activeCells[index].alreadyChecked = false;
-    this.activeCells[index].matched = false;
-  
-  }
-
-};
-
-
-/**
- * FUNCTION: Count the number of the number of cells with the "matched" flag set to TRUE, from the "activeCells" array
- * PARAMETERS: None
- * RETURNS: + The number of matches in the "activeCells" array
- * DEPENDENCIES: None
-**/
-Player.prototype.countMatches = function() {
- 
-  let counter = 0;
-  // Loop over the "activeCells" array 
-  for (let index = 0; index < this.activeCells.length; index += 1) {
-    // If the matched flag is set to TRUE, increase the counter
-    if ( this.activeCells[index].matched ) {
-      counter += 1;
-    }
-  }
-
-  // Return the counter
-  return counter;
-
-};
-
-
-/**
- * FUNCTION: Checks if 3 or more cells of the same color are touching
- * PARAMETERS: 1. Level Object
- * RETURNS: + The number of mathches found
- * DEPENDENCIES: + Player.findAllMatches(Active Cell Object: { row: <>, column: <>, color: <>, current: <> })
- *               + Player.countMatches()
-**/
-Player.prototype.getNbMatches = function(level) {
-
-  // Recursively check all touching cells to find the ones with the same color
-  this.findAllMatches(this.activeCells[this.activeCells.length - 1]);
-  
-  // Count the number of cells with the same color as the current one
-  let count = this.countMatches();
-  
-  // Return the number of matches
-  return count;
 
 };
 
@@ -586,5 +349,359 @@ Player.prototype.showBubble = function(message, infoNumber, level) {
         console.log("Unexpected cell color: ", this.currentCell.color);
     };
   }
+
+};
+
+
+/**
+ * FUNCTION: Checks if 3 or more cells of the same color are touching
+ * PARAMETERS: 1. Level Object
+ * RETURNS: + The number of mathches found
+ * DEPENDENCIES: + Player.findAllMatches(Active Cell Object: { row: <>, column: <>, color: <>, current: <> })
+ *               + Player.countMatches()
+**/
+Player.prototype.getNbMatches = function(level) {
+
+  // Recursively check all touching cells to find the ones with the same color
+  this.findAllMatches(this.activeCells[this.activeCells.length - 1]);
+  
+  // Count the number of cells with the same color as the current one
+  let count = this.countMatches();
+  
+  // Return the number of matches
+  return count;
+
+};
+
+
+/**
+ * FUNCTION: Finds recursively the cells that are touching in any direction with the same color and flag them as ".matched" (TRUE)
+ * PARAMETERS: 1. Active Cell Object: { row: <>, column: <>, color: <>, current: <> }
+ *                The cell to chck
+ * RETURNS: undefined
+ * DEPENDENDIES: + Player.touchWithColor(Active Cell Object: { row: <>, column: <>, color: <>, current: <> })
+**/
+Player.prototype.findAllMatches = function (cell) {
+  
+  // Test for touching cells with the same color
+  let isTouchingWithSameColor = this.touchWithColor(cell);
+  
+  // If cells are touching with the same color 
+  if ( isTouchingWithSameColor.length > 0 ) {
+    
+    // For each cell touching with the same color      
+    isTouchingWithSameColor.forEach(function (element) {
+
+      // if the cell has not been checked already
+      if( !this.activeCells[element].alreadyChecked ) {
+
+        // Mark the cell as matched
+        this.activeCells[element].matched;
+
+        // Recursively check the cell and all following cells that are touching and have the same color
+        this.findAllMatches(this.activeCells[element]);
+      }
+    }.bind(this));
+  } 
+
+};
+
+
+/**
+ * FUNCTION: Checks if a cell is touching another one with the same color (either up, right, down or left)
+ * PARAMETERS: 1. Active Cell Object: { row: <>, column: <>, color: <>, current: <> }
+ *                The cell to check
+ * RETURNS: + [Array] of objects.
+ *            Each object has the following structure:
+ *              { cell1: <first cell compared>,
+ *                cell2: <second cell compared>,
+ *                touch: <true: if the two cells are touching and of the same color, else false>
+ *              }
+ * DEPENDENCIES: + Player.getActiveCellIndex(Cell Object: { row: <>, column: <> })
+ *               + Player.isSameColor(cell1Index, cell2Index)
+ *               + Player.isActive(Cell Object: { row: <>, column: <> })
+**/
+Player.prototype.touchWithColor = function(cell) {
+
+  // Set the values of the cells around
+  let upCell    = { row: cell.row - 1, column: cell.column     };
+  let rightCell = { row: cell.row    , column: cell.column + 1 };
+  let downCell  = { row: cell.row + 1, column: cell.column     };
+  let leftCell  = { row: cell.row    , column: cell.column - 1 };
+  
+  // Get cells index from the "activeCells" array
+  let cellIndex = this.getActiveCellIndex(cell);
+  let upCellIndex = this.getActiveCellIndex(upCell);
+  let rightCellIndex = this.getActiveCellIndex(rightCell);
+  let downCellIndex = this.getActiveCellIndex(downCell);
+  let leftCellIndex = this.getActiveCellIndex(leftCell);
+   
+  // This array inclues objects storing the test results clockwise (0: result of test up, 1: result of test right, 2: result of test down, 3: result of test left)  
+  let objToReturn = [];
+
+  // Variables store the return values of the 'Player.isSameColor' function in the four directions, clockwise (up, right, down, left)
+  let isUpCellSameColor = this.isSameColor(cellIndex, upCellIndex);
+  let isRightCellSameColor = this.isSameColor(cellIndex, rightCellIndex);
+  let isDownCellSameColor = this.isSameColor(cellIndex, downCellIndex);
+  let isLeftCellSameColor = this.isSameColor(cellIndex, leftCellIndex);
+  
+  // Checks if two cells are touching and have the same color 
+  if ( this.isActive(upCell) && isUpCellSameColor !== false ) { objToReturn.push(isUpCellSameColor); }  // UP
+  if ( this.isActive(rightCell) && isRightCellSameColor !== false ) { objToReturn.push(isRightCellSameColor); }  // RIGHT
+  if ( this.isActive(downCell) && isDownCellSameColor !== false ) { objToReturn.push(isDownCellSameColor); }  // DOWN
+  if ( this.isActive(leftCell) && isLeftCellSameColor !== false ) { objToReturn.push(isLeftCellSameColor); } // LEFT  
+
+  // Mark the cell as alreadyChecked
+  this.activeCells[cellIndex].alreadyChecked = true;
+
+  if ( objToReturn.length > 0 ) {
+    // Mark the cell as matched
+    this.activeCells[cellIndex].matched = true;
+  }
+
+  // Return the array of matching indexes
+  return objToReturn;
+
+};
+
+
+/**
+ * FUNCTION: Returns the index of a cell from the "activeCells" array
+ * PARAMETERS: 1. Cell object: { row: <>, column: <> }
+ * RETURNS: + Index of the first occurance of the cell, found in the "activeCells" array
+ *          + -1 if the cell was not found in the "activeCells" array
+ * DEPENDENCIES: None
+**/
+Player.prototype.getActiveCellIndex = function(cell) {
+
+  // Find the first cell matching the row and column from the "activeCells" array
+  let indexToReturn = this.activeCells.find(function(element) {
+     return element.row === cell.row && element.column === cell.column
+  });
+
+  // Return the index of the cell found,
+  // Or return -1 if the cell was not found
+  return this.activeCells.indexOf(indexToReturn);
+
+};
+
+
+/**
+* FUNCTION: Checks if two cells have the same color (based on the "activeCells" array)
+ * PARAMETERS: 1. First cell index (index of a cell in the "activeCells" array)
+ *             2. Second cell index (index of a cell in the "activeCells" array)
+ * RETURNS: + cell2Index if the two cells have the same color
+ *          + FALSE if the two cells have a different color or if one of the index is -1
+ * DEPENDENCIES: None
+**/
+Player.prototype.isSameColor = function(cell1Index, cell2Index) {
+
+  // Return FALSE if one of the index is -1
+  // The index can be -1 when a cell was not found in the "activeCells" array by the Player.getActiveCellIndex earlier in the code flow
+  if ( cell1Index === -1 || cell2Index === -1 ) {
+    return false;
+  } 
+  
+  // if the color matches, return the cell2 index
+  if ( this.activeCells[cell1Index].color === this.activeCells[cell2Index].color ) {
+    return cell2Index;
+  } else {
+    return false;
+  }
+
+};
+
+
+/**
+ * FUNCTION: Checks if a cell is active (belongs to the activeCells array)
+ * PARAMETERS: 1. Cell object: { row: <>, column: <> }
+ * RETURNS: + TRUE if the cell is found in the "activeCells" array
+ *          + FALSE if the cell is not found in the "activeCells" array
+ * DEPENDENCIES: None
+**/
+Player.prototype.isActive = function(cell) {
+
+  // Returns TRUE if cell is found in the active array,
+  // Else FALSE
+  return this.activeCells.some(function (element) { 
+    return element.row == cell.row && element.column == cell.column;
+  }.bind(this));
+
+};
+
+
+/**
+ * FUNCTION: Count the number of the number of cells with the "matched" flag set to TRUE, from the "activeCells" array
+ * PARAMETERS: None
+ * RETURNS: + The number of matches in the "activeCells" array
+ * DEPENDENCIES: None
+**/
+Player.prototype.countMatches = function() {
+ 
+  let counter = 0;
+  // Loop over the "activeCells" array 
+  for (let index = 0; index < this.activeCells.length; index += 1) {
+    // If the matched flag is set to TRUE, increase the counter
+    if ( this.activeCells[index].matched ) {
+      counter += 1;
+    }
+  }
+
+  // Return the counter
+  return counter;
+
+};
+
+
+/** 
+ * FUNCTION: Removes all the matched cells from the 'Player.activeCells' array,
+ *           except the current cell
+ * PARAMETERS: None
+ * RETURNS: undefined
+ * DEPENDENCIES: None
+**/
+Player.prototype.clearMatches = function() {
+
+  // Loop over the whole activeCells array
+  for (let index = this.activeCells.length -1; index >= 0; index -= 1) { 
+    
+    // if the matched flag is present and the cell is not the current one   
+    if ( this.activeCells[index].matched && !this.activeCells[index].current ) {
+
+      // Then, remove the cell from the activeCells array
+      this.activeCells.splice(index, 1);
+    
+    }
+  }
+
+};
+
+
+/**
+ * FUNCTION: Checks if there is any cell around the current cell
+ * PARAMETERS: 1. Cell object: { row: <>, column: <> }
+ *             2. Level Object
+ * RETURNS: + TRUE if there is at least one cell around available (up, right, down or left)
+ * DEPENDENCIES: + Player.isCellFree(Cell object: { row: <>, column: <> })
+ *               + Player.isCellInBoard(Cell object: { row: <>, column: <> }, Level Object)
+**/
+Player.prototype.isFreeCellAround = function (cell, level) {
+  
+  // Set the values of the cells around
+  let upCell    = { row: cell.row - 1, column: cell.column     };
+  let rightCell = { row: cell.row    , column: cell.column + 1 };
+  let downCell  = { row: cell.row + 1, column: cell.column     };
+  let leftCell  = { row: cell.row    , column: cell.column - 1 };
+
+  // Return TRUE if, at least, one cell around (up, right, down or left) is free
+  if (  (this.isCellFree(upCell) && this.isCellInBoard(upCell, level)) ||
+        (this.isCellFree(rightCell) && this.isCellInBoard(rightCell, level)) ||
+        (this.isCellFree(downCell) && this.isCellInBoard(downCell, level)) ||
+        (this.isCellFree(leftCell) && this.isCellInBoard(leftCell, level))
+  ) { 
+    return true;
+  }
+  
+  // Else, it means that the Player can not move to any direction. The Player is stuck
+  console.log("You are stuck mate :'(");
+
+  // In that case, return FALSE
+  return false;
+
+};
+
+
+/**
+ * FUNCTION: Clear the player information on the page 
+ * PARAMETERS: 1. Boolean: Used as a flag to know if we are reseting the level (true)
+ *                or just refreshing the page (no second param)
+ * RETURNS: undefined
+ * DEPENDENCIES: None
+**/
+Player.prototype.clearPlayer = function(clearAllPlayerData) {
+
+  // If the second paramater is true, then we are reseting the level, so clear ALL player data
+  if (clearAllPlayerData) {
+    // Reset the player object (related to the level)
+    this.activeCells = [];
+    this.currentCell = {};
+    this.nextCell = {};
+    this.direction = 'None';
+    this.levelScore = 0;
+    this.nbLevelMoves = 0;
+
+    // Clear lost div
+    $('.lost').remove();
+  }
+
+  // Clear each active cell on the board (based on color)
+  availableColor.forEach(function(color) {
+    $('.board > .' + color).removeClass(color);
+  });
+
+  // Clear current div
+  $('.current').remove();
+
+  // Clear the next colors
+  $('.color-list li').removeAttr('class');
+  $('.color-list li').addClass('preview-cell');
+
+};
+
+
+/**
+ * FUNCTION: Draw all the player moves (steps) since the level started
+ * PARAMETERS: 1. Level Object
+ * RETURNS: undefined
+ * DEPENDENCIES: + Level.updateColorList()
+**/
+Player.prototype.drawPlayer = function(level) {
+
+  // For each active cell, draw the cell on the page
+  for (let index = 0 ; index < this.activeCells.length; index += 1) {
+      
+      // Find the cell to update on the board
+      let selector = '[data-row=' + this.activeCells[index].row + ']' +
+                     '[data-col=' + this.activeCells[index].column + ']';
+      // Init the color on the board
+      $(selector).addClass(this.activeCells[index].color);
+
+      // Set the current cell ( the cell with the o icon which is the first one the user can use )
+      if ( this.activeCells[index].current ) {
+        $(selector).append($('<div>').addClass('current'));
+        
+        // Add animation effet to display the current cell
+        // If the player is next to a cell or a border and going to this direction, don't show animation
+        if( !this.cannotMove ) {
+          
+          // if ( this.direction === "up"  ) { $(selector).fadeIn('slide',{direction:'down'},1000); } 
+          // if ( this.direction === 'right' ) { $(selector).fadeIn('slide',{direction:'left'},1000); }
+          // if ( this.direction === 'down' ) { $(selector).fadeIn('slide',{direction:'up'},1000); }
+          // if ( this.direction === 'left' ) { $(selector).fadeIn('slide',{direction:'right'},1000); }
+        
+          // Fade in for the first cell displayed
+          if ( this.direction === undefined) { $(selector).fadeIn(200); } else {
+           
+            // Play the move sound
+            let audioMove = new Audio('./sounds/branch_break.mp3');
+            audioMove.play();
+          }
+
+          // In any case, the o icon get displayed with a fadeIn
+          $('.current').hide().fadeIn(600);
+        }
+      }
+  }
+
+  // Set the player current score
+  $('.level-goal__progress').text(this.levelScore);
+   // Set the target scope for the level
+  $('.level-goal__target').text(level.success);
+
+  // Init the first next three colors from the color-list
+  level.updateColorList();
+
+  // Reset this flag
+  this.cannotMove = false;
 
 };

@@ -31,6 +31,8 @@ function Game() {
  *               + Level.setBoardSize()
 **/
 Game.prototype.resize = function() {
+
   this.level.setBoardHeaderSize();
   this.level.setBoardSize();
+
 };

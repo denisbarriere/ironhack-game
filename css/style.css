@@ -5,7 +5,9 @@
 /* FONT */
 @import url('https://fonts.googleapis.com/css?family=Josefin+Sans:100:300,400,700');
 
-/* CSS Reset */
+/**
+ * CSS Reset
+**/
 *,
 *::before,
 *::after { 
@@ -13,66 +15,76 @@
   padding: 0;
 }
 
-/* 
+/**
  * GLOBAL STYLES
-*/
+**/
 html {
-  font-size: 10px;
-  font-family: 'Josefin Sans', sans-serif;
   width: 100%;
   height: 100%;
   overflow: hidden;
+
+  font-size: 10px;
+  font-family: 'Josefin Sans', sans-serif;
 }
 
 body {
-  background: radial-gradient( #e0f5e9, #e1f5e8);
-  text-align: center;
   width: 100%;
   height: 100%;
   position: relative;
   overflow: hidden;
+  
+  text-align: center;
+  background: radial-gradient( #e0f5e9, #e1f5e8);
 }
 
 .clearfix::after {
-  content: "";
   display: table;
   clear: both;
+  content: "";
 }
 
 
-/*
+/**
  * GAME TITLE -- LOADING SCREEN --
-*/
+**/
 .game-loading-container { 
-  background-color: #fff;
+  /* Positioning */
+  display: block;
   width: 100vw;
   height: 100vh;
-  display: block;
-  z-index: 99999;
   position: absolute;
   top: 0;
   left: 0;
+  z-index: 99999;
+  
+  /* Styling */
+  background-color: #fff;
 }
 
 .game-loading-container > h1 {
+  /* Positioning */
   display: none;
-  font-size: 4rem;
-  color: #fff;
-  font-weight: 400;
   margin-bottom: 4rem;
+  
+  /* Styling */
+  font-size: 4rem;
+  font-weight: 400;
+  color: #fff;
 }
-
 
 .game-loading-container__title:first-child { 
-  padding-top: 50vh;
+  /* Positioning */
   margin-top: -10.4rem;
+  padding-top: 50vh;
 }
 
-/*
+
+/**
  * LEVEL TITEL -- LOADING PAGE --
-*/
+**/
 
 .loading-cell { 
+  /* Positioning */
   display: inline-block;
   height: 4.5rem;
   width: 6.2rem;
@@ -80,27 +92,30 @@ body {
 }
 
 .level-loading-container { 
+  /* Positioning */
   display: block;
+  width: 100vw;
+  height: 100vh;
   position: absolute;
   top: 0;
   left: 0;
-  width: 100vw;
-  height: 100vh;
   z-index: 9999;
+
+  /* Styling */
   background-color: #60c5d7;
 }
 
 .level-loading-container .level { 
   /* Positioning */
-  margin-top: 30vh;
-  margin-left: 10vw;
   width: 80vw;
   height: 28vh;
-  padding-top: 14vh;
+  margin-top: 30vh;
+  margin-left: 10vw;
   border-top: 1px solid #fff;
   border-bottom: 1px solid #fff;
+  padding-top: 14vh;
   
-  /* Font Styles */
+  /* Styling */
   font-size: 2rem;
   font-weight: 100;
   font-style: italic;
@@ -111,151 +126,192 @@ body {
 .levelTarget {
   /* Positioning */
   display: inline-block;
-  margin-top: 2rem;
   border-top: 1px solid #313644;
+  margin-top: 2rem;
   
-  /* Font Styles */
+  /* Styling */
   font-size: 1.4rem;
   text-transform: none;
 }
 
-.levelTarget p:first-child { margin-top: 2rem; }
+.levelTarget p:first-child { 
+  /* Positioning */
+  margin-top: 2rem;
+}
 
-.levelTarget p {     
-  color: #313644;
+.levelTarget p {    
+  /* Styling */ 
   font-weight: 400;
+  color: #313644;
 }
 
 
-/*
+/**
  * GAME SCREEN
-*/
+**/
 .game-container {
+  /* Positioning */
+  width: 100vw;
+  height: 100vh;
   position: fixed;
   top: 0;
   left: 0;
-  width: 100vw;
-  height: 100vh;
   z-index: 99999;
 }
 
 .game-screen {
-  position: fixed;
+  /* Positioning */
   width: 100%;
   height: 100%;
+  position: fixed;
+
+  /* Styling */
   background-color: #e7e7e7;
  }
 
-/* Header */
+/* HEADER */
 .game-header {
-  position: relative;
+  /* Positioning */
   width: 100vw;
   height: 10vh;
+  position: relative;
+
+  /* Styling */
   background-color: #141413;
 }
 
 /* Arrow */
 .arrow-up {
-  position: absolute;
-  bottom: 0;
-  left: 5.9375%;
+  /* Positioning */
   width: 0; 
   height: 0; 
   border-left: 0.625rem solid transparent;
   border-right: 0.625rem solid transparent;
   border-bottom: 0.625rem solid #e7e7e7;
+  position: absolute;
+  bottom: 0;
 }
 
 /* Next colors */
 .next-colors { 
-  position: absolute;
-  top: 25%;
-  left: 4.0625%;
-  width: 27.495%;
+  /* Positioning */
+  width: auto;
+  float: left;
+  margin-left: 4.0625vw;
 }
 
 .color-list {
-  list-style: none;
+  /* Positioning */
   width: 100%;
   height: 100%;
+
+  /* Styling */
+  list-style: none;
 }
 
 .preview-cell {
-  float: left;
-  margin-right: 3.7907595779%;
-  height: 4.489436619vh;
+  /* Positioning */
   width: 4.489436619vh;
+  height: 4.489436619vh;
+  margin-right: 0.4rem;
+  float: left;
 }
 
 /* Level achivement and target */
 .level-goal { 
-  color: #fff;
+  /* Positioning */
+  position: absolute;
+  top: 33.0078125%;
+  left: 31vw;
+
+  /* Styling */
   font-size: 1.2rem;
   font-style: italic;
-  position: absolute;
-  left: 31vw;
-  top: 33.0078125%;
+  color: #fff;
  }
 
 .thin-line { 
+  /* Positioning */
+  margin-right: 0.8rem;
+  margin-left: 1rem;
+  
+  /* Styling */
   font-size: 0.5rem;
   vertical-align: 16%;
-  margin-left: 1rem;
-  margin-right: 0.8rem;
 }
 
 /* Menu */
 .back-to-menu { 
-  position: absolute;
+  /* Positioning */
   width: 4.92957746479vh;
   height: 4.92957746479vh;
-  top: 25%;
-  right: 4.6875vw;
+  margin-right: 4.6875vw;
+  float: right;
+
+  /* Styling */
   background-color: #232322;
 }
 
-.back-to-menu a:link,
-.back-to-menu a:visited,
-.back-to-menu a:hover,
-.back-to-menu a:active {
+.back-to-menu > a:link,
+.back-to-menu > a:visited,
+.back-to-menu > a:hover,
+.back-to-menu > a:active {
+  /* Positioning */
+  display: block;
   width: 4.92957746479vh;
   height: 4.92957746479vh;
-  display: block;
+  position: relative;
+
+  /* Styling */
   font-size: 2rem;
   font-weight: 300;
   line-height: 3.6rem;
-  color: #fff;
   text-decoration: none;
+  color: #fff;
 }
 
-/*
+.back-to-menu > a > span { 
+  /* Positioning */
+  position: absolute;
+ }
+
+
+/**
 * GAME BOARD
-*/
+**/
 
 /* BOARD */
 .game-board-container {
-  position: fixed;
+  /* Positioning */
   padding-top: 6.161971831vh;
+  position: fixed;
+  
+  /* Styling */
   background-color: #e7e5e7;
 }
 
 .board {
-  position: fixed;
+  /* Positioning */
   width: 96.875vw;
   height: 76.41vh;
+  position: fixed;
+
+  /* Styling */
   background-color: #fff;
 }
 
 .cell {
-  float: left;
-  height: 19.375vw;
+  /* Positioning */
   width: 19.375vw;
+  height: 19.375vw;
   position: relative;
+  float: left;
 }
 
 .current {
-  height: 12.5%;
+  /* Positioning */
   width: 12.5%;
+  height: 12.5%;
   border-radius: 50%;
   border: 1px solid #fff;
   position: absolute;
@@ -265,6 +321,12 @@ body {
 
 .won,
 .lost {
+  /* Positioning */
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  /* Styling */
   font-size: 2rem;
   line-height: 6.6rem; 
   color: #fff;
@@ -275,21 +337,24 @@ body {
 .red { background-color: #f70030; }
 .light-green { background-color: #416563; }
 
-/*
+
+/**
  * GAME INFORMATION BUBBLE
- */
+**/
 .info {
+  /* Positioning */
   display:none; 
+  height: auto;
+  padding: 1rem;
   position: absolute;
   bottom: 80%;
-  padding: 1rem;
   z-index: 999;
-      height: auto;
   
+  /* Styling */
   font-size: 1.6rem;
   font-weight: 100;
-  background-color: #000;
   color: #fff;
+  background-color: #000;
 }
 
 /* Increase font size for retina dispalay */
@@ -305,60 +370,80 @@ body {
 
 /* Arrow displayed at the bottom left corner of the bubble */
 .info.left::before { 
-  content: "";
-  position: absolute;
-  bottom: -2rem;
-  right: 9rem;
-  border-width: 0 0 2rem 4rem;
-  border-style: solid;
-  border-color: transparent #000;
+  /* Positioning */
   display: block;
   width: 0;
+  border-width: 0 0 2rem 4rem;
+  position: absolute;
+  right: 9rem;
+  bottom: -2rem;
   z-index: 999;
+  
+  /* Content */
+  content: "";
+
+  /* Styling */
+  border-style: solid;
+  border-color: transparent #000;
 }
 
 .info.left::after {
-  content: "";
-  position: absolute;
-  bottom: -2rem;
-  right: 12rem;
-  border-width: 0 0 2rem 1rem;
-  border-style: solid;
-  border-color: transparent #60c5d7;
+  /* Positioning */
   display: block;
   width: 0;
+  border-width: 0 0 2rem 1rem;
+  position: absolute;
+  right: 12rem;
+  bottom: -2rem;
   z-index: 999;
+  
+  /* Content */
+  content: "";
+
+  /* Styling */
+  border-style: solid;
+  border-color: transparent #60c5d7;
 }
 
 /* Arrow displayed at the bottom right corner of the bubble */
 .info.right::before { 
-  content: "";
-  position: absolute;
-  bottom: -2rem;
-  right: 0rem;
+  /* Positioning */
+  display: block;
+  width: 0;
   border: 0;
   border-right-width: 3rem;
   border-bottom-width: 2rem;
+  position: absolute;
+  bottom: -2rem;
+  right: 0rem;
+  z-index: 999;
+  
+  /* Content */
+  content: "";
+  
+  /* Styling */
   border-style: solid;
   border-color: transparent #000;
-  display: block;
-  width: 0;
-  z-index: 999;
 }
 
 .info.right::after {
-  content: "";
-  position: absolute;
-  bottom: -20px;
-  right: 0rem;
+  /* Positioning */
+  display: block;
+  width: 0;
   border: 0;
   border-right-width: 1rem;
   border-bottom-width: 2rem;
+  position: absolute;
+  right: 0rem;
+  bottom: -20px;
+  z-index: 999;
+  
+  /* Content */
+  content: "";
+  
+  /* Styling */
   border-style: solid;
   border-color: transparent #60c5d7;
-  display: block;
-  width: 0;
-  z-index: 999;
 }
 
 /* Size of the first info bubble */
@@ -388,32 +473,43 @@ body {
 }
 
 .info.left.fourth-info::before { 
-  content: "";
-  position: absolute;
-  top: -2rem;
-  left: 0rem;
+  /* Positioning */
+  display: block;
+  width: 0;
+  height: 0;
   border: 0;
   border-left-width: 3rem;
   border-top-width: 2rem;
+  position: absolute;
+  top: -2rem;
+  left: 0rem;
+
+  /* Content */
+  content: "";
+  
+  /* Styling */
   border-style: solid;
   border-color: transparent #000;
+ }
+
+.info.left.fourth-info::after {
+  /* Positioning */
   display: block;
   width: 0;
   height: 0;
- }
-.info.left.fourth-info::after {
-  content: "";
-  position: absolute;
-  top: -20px;
-  left: 0rem;
   border: 0;
   border-left-width: 1rem;
   border-top-width: 2rem;
+  position: absolute;
+  top: -20px;
+  left: 0rem;
+  
+  /* Content */
+  content: "";
+  
+  /* Styling */
   border-style: solid;
   border-color: transparent #e7e7e7;
-  display: block;
-  width: 0;
-  height: 0;
  }
 
 /* Size of the fifth info bubble */

@@ -27,38 +27,72 @@ function Level(level) {
  *    => Functions            *
  *                            *
  * ****************************/
-/**
- * FUNCTION: Calculate the dimension of the board header
- *           It basically adapts the header elements size to the screen size
- * PARAMETERS: None
+/*
+ * FUNCTION: Initialise a new level
+ * PARAMETERS: 1. Player object
  * RETURNS: undefined
- * DEPENDENCIES: None
- **/
-Level.prototype.setBoardHeaderSize = function() {
+ * DEPENDENCIES: + Level.setBoardSize()
+ *               + Level.setBoardHeaderSize()
+ *               + Player.drawPlayer(Level)
+ *               + Level.assignControlsToKeys(Player)
+ */
+Level.prototype.initLevel = function(player) { 
   
-  // Get the width and height of the game-header block
-  let gameHeaderWidth = $('.game-header').width();
-  let gameHeaderHeight = $('.game-header').height();
-  
-  /* Next 3 colors */
-  // Get the width and height of the next-colors block
-  let nextColorwidth = $('.next-colors').width();
-  let nextColorHeight = $('.next-colors').height();
+  /* BUILD THE BOARD */
+  let currentIteration;
 
-  /* Level goal */
-  // Get the level-goal block width and height
-  let levelGoalwidth = $('.level-goal').width();
-  let levelGoalHeight = $('.level-goal').height();
+  // Create the HTML board, cell by cell, based on the level properties
+  for (let row = 0; row < this.height; row +=1 ) {
+    for (let column = 0; column < this.width; column +=1 ) {
+      $('.board').append($('<div>')
+        .addClass('cell')
+        .attr('data-row', row)
+        .attr('data-col', column)
+      );
+    }
+  }
 
-  // Calculate the top and left positions to center it vertically and horizontally
-  let levelGoalTop = ( gameHeaderHeight - levelGoalHeight ) / 2;
-  let levelGoalLeft = ( ( gameHeaderWidth - levelGoalwidth ) + ( nextColorwidth / 2 ) ) / 2; 
- 
-  // Set the computed top and left properties
-  $('.level-goal').css('top', levelGoalTop);
-  $('.level-goal').css('left', levelGoalLeft);
+  // For each cell in the initialState array:
+  // Push it to the activeCells array, in order to draw
+  // Set the currentCell
+  for (let index = 0 ; index < this.initState.length; index += 1) {
+    currentIteration = {
+        row: this.initState[index].row,
+        column: this.initState[index].column,
+        color: this.initState[index].color,
+        current: false
+    };
+    // If the current item is the current one, set it in the activeCells array
+    if ( this.initState[index].current ) {
+      currentIteration.current = true;
+      player.currentCell = currentIteration;
+    
+      // Add the information bubble, at level init, only at level 1
+      if (this.number === 1 ) {
+        let selector = '[data-row=' + player.currentCell.row + ']' +
+                       '[data-col=' + player.currentCell.column + ']';
+        
+        $(selector).append($('<div>').addClass('info left first-info'));
+        $('.info.left.first-info').text('Swipe any direction to move!');
+        $('.info.left.first-info').fadeIn(400);
+      }
+    }
 
-  // ? CTA
+    // Push the item to the activeCells array
+    player.activeCells.push(currentIteration);
+  } 
+
+  // Set the board header size on the page
+  this.setBoardHeaderSize();
+
+  // Set the board and cell size on the page
+  this.setBoardSize();
+
+  // Draw the player information (active / current cells, score and next queue)
+  player.drawPlayer(this);
+
+  // Assign keyboard key events to the game
+  this.assignControlsToKeys(player);
 
 };
 
@@ -216,138 +250,93 @@ Level.prototype.setXIconPosition = function() {
 };
 
 
-/*
- * FUNCTION: Initialise a new level
- * PARAMETERS: 1. Player object
+/**
+ * FUNCTION: Calculate the dimension of the board header
+ *           It basically adapts the header elements size to the screen size
+ * PARAMETERS: None
  * RETURNS: undefined
- * DEPENDENCIES: + Level.setBoardSize()
- *               + Level.setBoardHeaderSize()
- *               + Level.drawPlayer(Player)
- *               + Level.assignControlsToKeys(Player)
- */
-Level.prototype.initLevel = function(player) { 
+ * DEPENDENCIES: None
+ **/
+Level.prototype.setBoardHeaderSize = function() {
   
-  /* BUILD THE BOARD */
-  let currentIteration;
+  // Get the width and height of the game-header block
+  let gameHeaderWidth = $('.game-header').width();
+  let gameHeaderHeight = $('.game-header').height();
+  
+  /* NEXT 3 COLORS */
+  // Get the width and height of the next-colors block
+  let nextColorwidth = $('.next-colors').width();
+  let nextColorHeight = $('.next-colors').height();
 
-  // Create the HTML board, cell by cell, based on the level properties
-  for (let row = 0; row < this.height; row +=1 ) {
-    for (let column = 0; column < this.width; column +=1 ) {
-      $('.board').append($('<div>')
-        .addClass('cell')
-        .attr('data-row', row)
-        .attr('data-col', column)
-      );
-    }
-  }
+  // Calculate the top and left positions to center it vertically and horizontally
+  let nextColorTop = ( gameHeaderHeight - nextColorHeight ) / 2;
 
-  // For each cell in the initialState array:
-  // Push it to the activeCells array, in order to draw
-  // Set the currentCell
-  for (let index = 0 ; index < this.initState.length; index += 1) {
-    currentIteration = {
-        row: this.initState[index].row,
-        column: this.initState[index].column,
-        color: this.initState[index].color,
-        current: false
-    };
-    // If the current item is the current one, set it in the activeCells array
-    if ( this.initState[index].current ) {
-      currentIteration.current = true;
-      player.currentCell = currentIteration;
-    
-      // Add the information bubble, at level init, only at level 1
-      if (this.number === 1 ) {
-        let selector = '[data-row=' + player.currentCell.row + ']' +
-                       '[data-col=' + player.currentCell.column + ']';
-        
-        $(selector).append($('<div>').addClass('info left first-info'));
-        $('.info.left.first-info').text('Swipe any direction to move!');
-        $('.info.left.first-info').fadeIn(400);
-      }
-    }
-
-    // Push the item to the activeCells array
-    player.activeCells.push(currentIteration);
-  } 
-
-  // Set the board header size on the page
-  this.setBoardHeaderSize();
-
-  // Set the board and cell size on the page
-  this.setBoardSize();
-
-  // Draw the player information (active / current cells, score and next queue)
-  this.drawPlayer(player);
-
-  // Assign keyboard key events to the game
-  this.assignControlsToKeys(player);
-
-};
+  // Set the positioning properties
+  $('.next-colors').css('margin-top', nextColorTop + 'px');
 
 
-/**
- * FUNCTION: Set the direction of the move based on the key or swipe direction
- *           and update the level accordingly
- * PARAMETERS: 1. Action (either a keyCode or a swipe direction)
- *             2. Player Object
- * RETURNS: undefined
- * DEPENDENCIES: + Level.update(Player)
-**/
-Level.prototype.updatNextColorQueue = function() {
+  /* NEXT 3 COLORS - ARROW UP */
+  // Get the values required for positioning
+  let nextColorMarginLeft = $('.next-colors').css('marginLeft');
+  let nextColorCellWidth = $('.preview-cell').width();
+  let arrowUpWidth = $('.arrow-up').outerWidth();
 
-  // Update the next colors array
-  this.nextColorsQueue.shift();
+  // Remove the 'px form the value 
+  nextColorMarginLeft = nextColorMarginLeft.slice(0, nextColorMarginLeft.length - 2);
 
-  // If not enough colors are remaining, then push the inital set of colors back  
-  if ( this.nextColorsQueue.length < 3 ) {
-      
-    let levelProperties = eval("level"+this.number+"Properties");
-    for (let index = 0; index < levelProperties.nextColorsQueue.length; index += 1) {
-      this.nextColorsQueue.push(levelProperties.nextColorsQueue[index]);
-    }
-  }
+  // Calculate the left position
+  let arrowUpLeft = parseFloat(nextColorMarginLeft) + parseFloat(nextColorCellWidth / 2) - parseFloat(arrowUpWidth / 2);
+
+  // Set the positioning property
+  $('.arrow-up').css('left', arrowUpLeft + 'px');
+
+
+  /* LEVEL GOALS */
+  // Get the level-goal block width and height
+  let levelGoalwidth = $('.level-goal').width();
+  let levelGoalHeight = $('.level-goal').height();
+
+  // Calculate the top and left positions to center it vertically and horizontally
+  let levelGoalTop = ( gameHeaderHeight - levelGoalHeight ) / 2;
+  let levelGoalLeft = ( ( gameHeaderWidth - levelGoalwidth ) + ( nextColorwidth / 2 ) ) / 2; 
+ 
+  // Set the computed top and left properties
+  $('.level-goal').css('top', levelGoalTop + 'px');
+  $('.level-goal').css('left', levelGoalLeft + 'px');
+
+
+  /* ? CTA */
+  // Get the back-to-menu and link block height
+  let backToMenuWidth = $('.back-to-menu').width();
+  let backToMenuHeight = $('.back-to-menu').height();
+  let backToMenuATagWidth = $('.back-to-menu > a > span').width();
+  let backToMenuATagHeight = $('.back-to-menu > a > span').height();
+
+  // Calculate the top position to center it vertically and horizontally
+  let backToMenuTop = ( gameHeaderHeight - backToMenuHeight ) / 2;
+  let backToMenuATagTop = ( backToMenuHeight - backToMenuATagHeight ) / 2;
+  let backToMenuATagLeft = ( backToMenuWidth - backToMenuATagWidth ) / 2;
+
+  // Set the computed properties
+  $('.back-to-menu').css('margin-top', backToMenuTop + 'px');
+  $('.back-to-menu > a > span').css('top', backToMenuATagTop + 'px');
+  $('.back-to-menu > a > span').css('left', backToMenuATagLeft + 'px');
 
 };
 
 
 /**
- * FUNCTION: Set the direction of the move based on the key or swipe direction
- *           and update the level accordingly
- * PARAMETERS: 1. Action (either a keyCode or a swipe direction)
- *             2. Player Object
+ * FUNCTION: Update the next 3 colors in the level header
+ * PARAMETERS: None
  * RETURNS: undefined
- * DEPENDENCIES: + Level.update(Player)
+ * DEPENDENCIES: None
 **/
-Level.prototype.matchUserInputToGameActions = function(action, player) {
-
-  switch (action) {
-
-    case 38: // arrow up
-    case 'up': // swipe up
-
-      player.direction = 'up';
-      break;
-    
-    case 39: // arrow right
-    case 'right': // swipe right
-    
-      player.direction = 'right';
-      break;
-    
-    case 40: // arrow down
-    case 'down': // swipe down
-    
-      player.direction = 'down';
-      break;
-    
-    case 37: // arrow left
-    case 'left': // swipe left
-    
-      player.direction = 'left';
-      break;
+Level.prototype.updateColorList = function() {
+ 
+  // Loop over the first three elements of the array and display them in the page
+  for (let index = 0; index < 3; index += 1) {
+      $('.color-list li:nth-child(' + (index + 1) + ')').addClass(this.nextColorsQueue[index]);
   }
-  this.update(player);
 
 };
 
@@ -393,204 +382,67 @@ Level.prototype.assignControlsToKeys = function(player) {
 
 
 /**
- * FUNCTION: Clear the board on the page and clean level data at level reset
- * PARAMETERS: None
+ * FUNCTION: Set the direction of the move based on the key or swipe direction
+ *           and update the level accordingly
+ * PARAMETERS: 1. Action (either a keyCode or a swipe direction)
+ *             2. Player Object
  * RETURNS: undefined
- * DEPENDENCIES: None
+ * DEPENDENCIES: + Player.update(Level)
 **/
-Level.prototype.clearLevel = function() {
-  
-  // Reset the Level Object
-  this.nextColorsQueue = [];
+Level.prototype.matchUserInputToGameActions = function(action, player) {
 
-  // Reset the colorQueue to its initial value
-  let levelProperties = eval("level"+this.number+"Properties");
+  switch (action) {
 
-  for (let index = 0; index < levelProperties.nextColorsQueue.length; index += 1) {
-    this.nextColorsQueue.push(levelProperties.nextColorsQueue[index]);
+    case 38: // arrow up
+    case 'up': // swipe up
+
+      player.direction = 'up';
+      break;
+    
+    case 39: // arrow right
+    case 'right': // swipe right
+    
+      player.direction = 'right';
+      break;
+    
+    case 40: // arrow down
+    case 'down': // swipe down
+    
+      player.direction = 'down';
+      break;
+    
+    case 37: // arrow left
+    case 'left': // swipe left
+    
+      player.direction = 'left';
+      break;
   }
-  
-  // Clear the board on the screen
-  $('.board > .cell').remove();
+  player.update(this);
 
 };
 
 
 /**
- * FUNCTION: Clear the player information on the page 
- * PARAMETERS: 1. Player Object: to clear
- *             2. Boolean: Used as a flag to know if we are reseting the level (true)
- *                or just refreshing the page (no second param)
+ * FUNCTION: Set the direction of the move based on the key or swipe direction
+ *           and update the level accordingly
+ * PARAMETERS: 1. Action (either a keyCode or a swipe direction)
+ *             2. Player Object
  * RETURNS: undefined
  * DEPENDENCIES: None
 **/
-Level.prototype.clearPlayer = function(player, clearAllPlayerData) {
+Level.prototype.updatNextColorQueue = function() {
 
-  // If the second paramater is true, then we are reseting the level, so clear ALL player data
-  if (clearAllPlayerData) {
-    // Reset the player object (related to the level)
-    player.activeCells = [];
-    player.currentCell = {};
-    player.nextCell = {};
-    player.direction = 'None';
-    player.levelScore = 0;
-    player.nbLevelMoves = 0;
+  // Update the next colors array
+  this.nextColorsQueue.shift();
 
-    // Clear lost div
-    $('.lost').remove();
-  }
-
-  // Clear each active cell on the board (based on color)
-  availableColor.forEach(function(color) {
-    $('.board > .' + color).removeClass(color);
-  });
-
-  // Clear current div
-  $('.current').remove();
-
-  // Clear the next colors
-  $('.color-list li').removeAttr('class');
-  $('.color-list li').addClass('preview-cell');
-
-};
-
-
-/**
- * FUNCTION: Draw all the player moves (steps) since the level started
- * PARAMETERS: 1. Player Object: Used to retrieve the player information (position, direction...)
- * RETURNS: undefined
- * DEPENDENCIES: + Level.updateColorList()
-**/
-Level.prototype.drawPlayer = function(player) {
-
-  // For each active cell, draw the cell on the page
-  for (let index = 0 ; index < player.activeCells.length; index += 1) {
+  // If not enough colors are remaining, then push the inital set of colors back  
+  if ( this.nextColorsQueue.length < 3 ) {
       
-      // Find the cell to update on the board
-      let selector = '[data-row=' + player.activeCells[index].row + ']' +
-                    '[data-col=' + player.activeCells[index].column + ']';
-      // Init the color on the board
-      $(selector).addClass(player.activeCells[index].color);
-
-      // Set the current cell ( the cell with the o icon which is the first one the user can use )
-      if ( player.activeCells[index].current ) {
-        $(selector).append($('<div>').addClass('current'));
-        
-        // Add animation effet to display the current cell
-        // If the player is next to a cell or a border and going to this direction, don't show animation
-        if( !player.cannotMove ) {
-          $(selector).hide();
-          if ( player.direction === "up"  ) { $(selector).show('slide',{direction:'down'},100); } 
-          if ( player.direction === 'right' ) { $(selector).show('slide',{direction:'left'},100); }
-          if ( player.direction === 'down' ) { $(selector).show('slide',{direction:'up'},100); }
-          if ( player.direction === 'left' ) { $(selector).show('slide',{direction:'right'},100); }
-        
-          // Fade in for the first cell displayed
-          if ( player.direction === undefined) { $(selector).fadeIn(200); } else {
-           
-            // Play the move sound
-            let audioMove = new Audio('./sounds/branch_break.mp3');
-            audioMove.play();
-          }
-
-          // In any case, the o icon get displayed with a fadeIn
-          $('.current').hide().fadeIn(200);
-        }
-      }
-  }
-
-  // Set the player current score
-  $('.level-goal__progress').text(player.levelScore);
-   // Set the target scope for the level
-  $('.level-goal__target').text(this.success);
-
-  // Init the first next three colors from the color-list
-  this.updateColorList();
-
-  // Reset this flag
-  player.cannotMove = false;
-
-};
-
-
-/**
- * FUNCTION: Update the next 3 colors in the level header
- * PARAMETERS: None
- * RETURNS: undefined
- * DEPENDENCIES: None
-**/
-Level.prototype.updateColorList = function() {
- 
-  // Loop over the first three elements of the array and display them in the page
-  for (let index = 0; index < 3; index += 1) {
-      $('.color-list li:nth-child(' + (index + 1) + ')').addClass(this.nextColorsQueue[index]);
-  }
-
-};
-
-
-/**
- * FUNCTION: 
- * PARAMETERS: 1. Player Object: Used for cleaning and drawing the player again on the page 
- * RETURNS: undefined
- * DEPENDENCIES: + Player.move(Level)
- *               + Level.clearPlayer(Player)
- *               + Level.drawPlayer(Player)
-**/
-Level.prototype.update = function(player) {
-  
-  // Process player move request
-  player.move(this);  
-
-  // Clear the player moves on the board  
-  this.clearPlayer(player);
-
-  // Draw the player moves (now, including the new elements from the move request)
-  this.drawPlayer(player);
-
-};
-
-
-/**
- * FUNCTION: Lost Level. This function is called when a user got stuck in a level
- * PARAMETERS: 1. Player Object: Used to retrieve the position of the current cell
- * RETURNS: undefined
- * DEPENDENCIES: + Level.setXIconPosition()
- *               + Level.resetLevel(Player)
- *               + Level.endLevel()
-**/
-Level.prototype.lost = function(player) {
-  
-  // First, prevent users from moving more
-  $('body').off('keydown');
-  
-  // Delete the 'o' icon after a little delay
-  setTimeout(function() { $('.current').remove(); }, 10 );
- 
-  // Change the current cell icon from 'o' 'x'
-  let selector = '[data-row=' + player.currentCell.row + ']' +
-                 '[data-col=' + player.currentCell.column + ']';
-  $(selector).append($('<div>').addClass('lost'));
-  $('.lost').html("&#9587;");
-  
-  // Position the x icon according the size of a cell
-  this.setXIconPosition();
-
-  // Ask what the user wants to do now (after a small delay)
-  let timeoutId = setTimeout(function() {
-
-    let userChoice = confirm("Too bad, you just lost! Wanna retry?");
-
-    // OK: RETRY, then reset the game
-    if ( userChoice ) {
-      console.log("Cool, let's roll!");
-      this.resetLevel(player);
-
-    // KO: END the game
-    } else {
-      this.endLevel();
+    let levelProperties = eval("level"+this.number+"Properties");
+    for (let index = 0; index < levelProperties.nextColorsQueue.length; index += 1) {
+      this.nextColorsQueue.push(levelProperties.nextColorsQueue[index]);
     }
-  }.bind(this), 400);
+  }
 
 };
 
@@ -646,20 +498,44 @@ Level.prototype.win = function(player) {
  * FUNCTION: Resets a level
  * PARAMETERS: 1. Player Object: Used to reset the player in the level
  * RETURNS: undefined
- * DEPENDENCIES: + Level.clearPlayer(Player, Boolean)
+ * DEPENDENCIES: + Player.clearPlayer(Boolean)
  *               + Level.clearLevel()
  *               + Level.initLevel(Player)
 **/
 Level.prototype.resetLevel = function(player) {
   
   // Remove the player from the level
-  this.clearPlayer(player, true);
+  player.clearPlayer(true);
 
   // Remove all the level elements and clean all level data
   this.clearLevel();
 
   // Re-initialise the level  
   this.initLevel(player);
+
+};
+
+
+/**
+ * FUNCTION: Clear the board on the page and clean level data at level reset
+ * PARAMETERS: None
+ * RETURNS: undefined
+ * DEPENDENCIES: None
+**/
+Level.prototype.clearLevel = function() {
+  
+  // Reset the Level Object
+  this.nextColorsQueue = [];
+
+  // Reset the colorQueue to its initial value
+  let levelProperties = eval("level"+this.number+"Properties");
+
+  for (let index = 0; index < levelProperties.nextColorsQueue.length; index += 1) {
+    this.nextColorsQueue.push(levelProperties.nextColorsQueue[index]);
+  }
+  
+  // Clear the board on the screen
+  $('.board > .cell').remove();
 
 };
 
@@ -676,5 +552,49 @@ Level.prototype.endLevel = function(player) {
   timeoutId = setTimeout(function() { 
     alert("OK, see you around.")
   }, 200);
+
+};
+
+
+/**
+ * FUNCTION: Lost Level. This function is called when a user got stuck in a level
+ * PARAMETERS: 1. Player Object: Used to retrieve the position of the current cell
+ * RETURNS: undefined
+ * DEPENDENCIES: + Level.setXIconPosition()
+ *               + Level.resetLevel(Player)
+ *               + Level.endLevel()
+**/
+Level.prototype.lost = function(player) {
+  
+  // First, prevent users from moving more
+  $('body').off('keydown');
+  
+  // Delete the 'o' icon after a little delay
+  setTimeout(function() { $('.current').remove(); }, 10 );
+ 
+  // Change the current cell icon from 'o' 'x'
+  let selector = '[data-row=' + player.currentCell.row + ']' +
+                 '[data-col=' + player.currentCell.column + ']';
+  $(selector).append($('<div>').addClass('lost'));
+  $('.lost').html("&#9587;");
+  
+  // Position the x icon according the size of a cell
+  this.setXIconPosition();
+
+  // Ask what the user wants to do now (after a small delay)
+  let timeoutId = setTimeout(function() {
+
+    let userChoice = confirm("Too bad, you just lost! Wanna retry?");
+
+    // OK: RETRY, then reset the game
+    if ( userChoice ) {
+      console.log("Cool, let's roll!");
+      this.resetLevel(player);
+
+    // KO: END the game
+    } else {
+      this.endLevel();
+    }
+  }.bind(this), 400);
 
 };
