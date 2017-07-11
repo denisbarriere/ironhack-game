@@ -416,8 +416,11 @@ body {
        ( min-resolution: 192dpi ) { 
   /* Get this font size just for retina displays */
   @import url('https://fonts.googleapis.com/css?family=Josefin+Sans:300');
-  font-weight: 300; 
-  color: red;
+  .info {
+    font-weight: 300; 
+    color: red;
+    background-color: yellow;
+  }
 }
 
 /* position the bubble horizontally on the left or right of the cell */
