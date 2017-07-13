@@ -464,7 +464,8 @@ Level.prototype.win = function(player) {
   $('body').off('keydown');
 
   // Play the level complete sound
-  let audioMatch = new Audio('./sounds/133284__fins__level-completed.wav');
+  let audioMatch = new Audio();
+  audioMatch.src = './sounds/133284__fins__level-completed.wav';
   audioMatch.play();
 
   // Delete the 'o' icon after a little delay
@@ -577,7 +578,7 @@ Level.prototype.loose = function(player) {
   $('body').off('keydown');
   
   // Play the level lost sound
-  let audioMatch = new Audio('./sounds/370209__jugraf__fail-down.wav');
+  let audioMatch = new Audio('./sounds/boss dies.wav');
   audioMatch.play();
 
   // Delete the 'o' icon after a little delay

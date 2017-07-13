@@ -104,11 +104,11 @@ Player.prototype.move = function (level) {
     level.updatNextColorQueue();
        
     // Display the information bubbles in level 1
-    if (this.nbMoves === 1 && level.number === 1) { this.showBubble("You can only move to an empty space.", 2, level); } 
-    if (this.nbMoves === 2 && level.number === 1) { this.showBubble("Don't get locked in!", 3, level); }
-    if (this.nbMoves === 3 && level.number === 1) { this.showBubble("This shows the next color.", 4, level); }
-    if (this.nbMoves === 4 && level.number === 1) { this.showBubble("Match 3 or more squares of the same color!", 5, level); }
-    if (this.nbMoves === 5 && level.number === 1) { this.showBubble(); }
+    if (this.nbLevelMoves === 1 && level.number === 1) { this.showBubble("You can only move to an empty space.", 2, level); } 
+    if (this.nbLevelMoves === 2 && level.number === 1) { this.showBubble("Don't get locked in!", 3, level); }
+    if (this.nbLevelMoves === 3 && level.number === 1) { this.showBubble("This shows the next color.", 4, level); }
+    if (this.nbLevelMoves === 4 && level.number === 1) { this.showBubble("Match 3 or more squares of the same color!", 5, level); }
+    if (this.nbLevelMoves === 5 && level.number === 1) { this.showBubble(); }
 
     // Calculate the number of cells of the same color (the new current cell color) are touching
     let nbMatches = this.getNbMatches(level);

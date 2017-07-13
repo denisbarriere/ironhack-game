@@ -414,12 +414,9 @@ body {
 /* Increase font size for retina dispalay */
 @media ( -webkit-min-device-pixel-ratio: 2 ), 
        ( min-resolution: 192dpi ) { 
-  /* Get this font size just for retina displays */
-  @import url('https://fonts.googleapis.com/css?family=Josefin+Sans:300');
-  .info {
-    font-weight: 300; 
-    color: red;
-    background-color: yellow;
+  .info,
+  .back-to-menu > a {
+    font-weight: 400; 
   }
 }
 
