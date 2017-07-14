@@ -8,6 +8,7 @@ $(document).ready(function() {
   **/
   game = new Game();
 
+  
   /**
    *  GAME INIT: Animation showing the game title, then the level title and finally level 1 board
   **/
@@ -47,6 +48,7 @@ $(document).ready(function() {
     }
     lastTouchEnd = now;
   }, false);
+
 
   /**
    *  Resize the game automatically when the user resizes the view
