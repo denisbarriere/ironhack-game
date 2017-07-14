@@ -99,11 +99,11 @@ body {
 .game-landing-container__menu {
   visibility: hidden;
   opacity: 0;
-  animation: slideMainMenuUp 1s 2s forwards ease-in;
+  animation: fadeMainMenuIn 1s 2s forwards ease-in;
 }
 
 /* Main menu keyframe */
-@keyframes slideMainMenuUp {
+@keyframes fadeMainMenuIn {
   from { 
     opacity: 0;
   }

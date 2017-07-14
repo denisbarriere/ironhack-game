@@ -1,27 +1,19 @@
-/****************************************
- *                                      * 
- *  OBJECT: Level                       *
- *    => Constructor                    *
- *                                      *
- *  PARAMETERS: 1. levelXProperties     *
- *                 from level-data.js   *
- *                                      *
- * **************************************/
-function Level(level) {
+/**********************************
+ *                                *  
+ *  OBJECT: Level                 *
+ *    => Constructor              *
+ *                                *
+ *  PARAMETERS: 1. Player Object  *
+ *  DEPENDENCIES: None            *
+ *                                *
+ * ********************************/
+function Level(player) {
 
-  this.number = level.number; // e.g. 1 for level1
-  this.width = level.width; // Number of columns
-  this.height = level.height; // Number of rows
-  this.initState = level.initState; // Initial state of the board. e.g. position of the first cell (the current cell)
-  this.nextColorsQueue = []; // Array storing the next 3 cells coming up
-  this.success = level.success; // Success value. e.g the number of matches to do to win the level
+  this.player = player // Reference to the player
+  
+  // All the other Level properties will be initiated by the Level.initLevelData() function
 
-  // Initialise the nextColorsQueue (the next 3 colors displayed above the board)
-  for (let index = 0; index < level.nextColorsQueue.length; index += 1) {
-    this.nextColorsQueue.push(level.nextColorsQueue[index]);
-  }
-
-}
+};
 
 
 /******************************
@@ -30,16 +22,174 @@ function Level(level) {
  *    => Functions            *
  *                            *
  * ****************************/
-/*
+/**
+ * FUNCTION: Load the level:
+ *            + Show the loading page
+ *            + Show the game
+ * PARAMETERS: 1. const from level-data.js (The level properties to load)
+ *             2. Boolean if TRUE, it means that we have a level already displayed
+ * RETURNS: undefined
+ * DEPENDENCIES: + Level.initLevelData(levelXProperties)
+ *               + Level.resetLoadingPage()
+ *               + Level.resetLevel()
+ *               + Level.start()
+ *               + Level.end()
+**/
+Level.prototype.load = function(level, nextLevel) {
+
+    // If we have level to load
+    if (level) { 
+    
+      // First, set all the level properties based on the level-data
+      this.initLevelData(level);
+
+      // If a level is already displayed, first hide it
+      if ( nextLevel) {
+
+        this.resetLoadingPage();
+      
+      }
+
+      // Set the level number
+      $('.level > p > span').text(this.number);
+
+      // Set success instructions
+      $('.levelTarget').append(this.successInstructions)
+
+      // Then, load the first level loading
+      $('.level-loading-container').show();
+      $('.level-loading-container').delay(2200).animate({ backgroundColor: "#fff"}, 600 );
+      $('.levelTarget p').delay(2200).animate({ color: "#fff"}, 600 );
+      $('.levelTarget').delay(2200).animate({ borderTopColor: "#fff"}, 600 );
+
+      // And finally, hide it and show the level board
+      $('.level-loading-container').delay(8000, function() { 
+        $(this).hide(); 
+      });
+      
+      // Show the board after timeout
+      setTimeout( function() {
+        this.start();
+      }.bind(this), 2400);
+    
+    } else { // We completed all level, there is no more level
+    
+      // End the game
+      this.endLevel();
+
+    }
+
+};
+
+
+/**
+ * FUNCTION: Reset the loading page elements
+ * PARAMETERS: None
+ * RETURNS: undefined
+ * DEPENDENCIES: None
+**/
+Level.prototype.resetLoadingPage = function() {
+
+  // Reset the loading page color
+  $('.level-loading-container').css('background-color','#60c5d7');
+  $('.levelTarget p').css('color','#313644');
+  $('.levelTarget').css('border-top-color','#313644');
+  $('.levelTarget').text("");
+
+  // Hide the game board
+  $('.game-container').delay(200).hide('slide',{direction:'left'},600);
+
+  setTimeout(function() {
+    // Reset the level
+    this.resetLevel(this.player);
+  }.bind(this) ,1000);
+
+};
+
+
+/**
+ * FUNCTION: Initialise the level data
+ * PARAMETERS: 1. Level const from level-data.js
+ * RETURNS: undefined
+ * DEPENDENCIES: None
+**/
+Level.prototype.initLevelData = function(level) {
+
+  this.number = level.number; // e.g. 1 for level1
+  this.width = level.width; // Number of columns
+  this.height = level.height; // Number of rows
+  this.initState = level.initState; // Initial state of the board. e.g. position of the first cell (the current cell)
+  this.nextColorsQueue = []; // Array storing the next 3 cells coming up
+  this.success = level.success; // Success value. e.g the number of matches to do to win the level
+  this.successInstructions = level.successInstructions; // Instructions displayed on the level loading page
+
+  // Initialise the nextColorsQueue (the next 3 colors displayed above the board)
+  for (let index = 0; index < level.nextColorsQueue.length; index += 1) {
+    this.nextColorsQueue.push(level.nextColorsQueue[index]);
+  }
+
+};
+
+
+ /**
+ * FUNCTION: Display the game board for the user to play
+ * PARAMETERS: 1. Level const from level-data.js
+ * RETURNS: undefined
+ * DEPENDENCIES: + Level.initLevelData(levelXProperties)
+ *               + Level.initLevel()
+ *               + Level.setBoardSize()
+ *               + Level.setBoardHeaderSize()
+**/
+ Level.prototype.start = function(level) {
+
+  // Initiate the level
+  this.initLevel();
+
+  // Display the game board
+  $('.game-container').show(600);
+      
+  // Resize the board
+  this.setBoardHeaderSize();
+  this.setBoardSize();
+
+};
+
+
+/**
+ * FUNCTION: End the game by showing a message on the loading page
+ * PARAMETERS: None
+ * RETURNS: undefined
+ * DEPENDENCIES: + Level.resetLoadingPage()
+**/
+Level.prototype.endLevel = function() {
+
+  // Reset the loading page
+  this.resetLoadingPage();
+
+  // Show the goodby message
+  $('.level').text("");
+  $('.level').append(`<p>Congratulations!</p>
+    <div class="levelTarget">
+      <p>You completed all levels!</p>
+      <p>More coming soon</p>      
+    </div>`);
+
+    // Then, load the first level loading
+    $('.level-loading-container').show();
+
+};
+
+
+/**
  * FUNCTION: Initialise a new level
- * PARAMETERS: 1. Player object
+ * PARAMETERS: None
  * RETURNS: undefined
  * DEPENDENCIES: + Level.setBoardSize()
  *               + Level.setBoardHeaderSize()
  *               + Player.drawPlayer(Level)
- *               + Level.assignControlsToKeys(Player)
- */
-Level.prototype.initLevel = function(player) { 
+ *               + Level.assignControlsToKeys()
+**/
+Level.prototype.initLevel = function() { 
   
   /* BUILD THE BOARD */
   let currentIteration;
@@ -68,12 +218,12 @@ Level.prototype.initLevel = function(player) {
     // If the current item is the current one, set it in the activeCells array
     if ( this.initState[index].current ) {
       currentIteration.current = true;
-      player.currentCell = currentIteration;
+      this.player.currentCell = currentIteration;
     
       // Add the information bubble, at level init, only at level 1
       if (this.number === 1 ) {
-        let selector = '[data-row=' + player.currentCell.row + ']' +
-                       '[data-col=' + player.currentCell.column + ']';
+        let selector = '[data-row=' + this.player.currentCell.row + ']' +
+                       '[data-col=' + this.player.currentCell.column + ']';
         
         $(selector).append($('<div>').addClass('info left first-info'));
         $('.info.left.first-info').text('Swipe any direction to move!');
@@ -82,7 +232,7 @@ Level.prototype.initLevel = function(player) {
     }
 
     // Push the item to the activeCells array
-    player.activeCells.push(currentIteration);
+    this.player.activeCells.push(currentIteration);
   } 
 
   // Set the board header size on the page
@@ -92,10 +242,10 @@ Level.prototype.initLevel = function(player) {
   this.setBoardSize();
 
   // Draw the player information (active / current cells, score and next queue)
-  player.drawPlayer(this);
+  this.player.drawPlayer(this);
 
   // Assign keyboard key events to the game
-  this.assignControlsToKeys(player);
+  this.assignControlsToKeys();
 
 };
 
@@ -346,11 +496,11 @@ Level.prototype.updateColorList = function() {
 
 /*
  * FUNCTION: Binds arrow keys and swipe moves to actions
- * PARAMETERS: 1. Player Object
+ * PARAMETERS: None
  * RETURNS: undefined
- * DEPENDENCIES: + Level.matchUserInputToGameActions(action, Player)
+ * DEPENDENCIES: + Level.matchUserInputToGameActions(action)
  */
-Level.prototype.assignControlsToKeys = function(player) {
+Level.prototype.assignControlsToKeys = function() {
   
   // Add an event listener to enable users to play with the keyboard
   $('body').on('keydown', function(e) {
@@ -365,7 +515,7 @@ Level.prototype.assignControlsToKeys = function(player) {
         e.keyCode === 80
     ) {
       // Perform game action based on the key direction
-      this.matchUserInputToGameActions(action, player);
+      this.matchUserInputToGameActions(action);
 
     }
   }.bind(this));
@@ -377,7 +527,7 @@ Level.prototype.assignControlsToKeys = function(player) {
     let action = touch.direction;
 
     // Perform game action based on the swipe direction
-    this.matchUserInputToGameActions(action, player);
+    this.matchUserInputToGameActions(action);
      
   }.bind(this));
 
@@ -388,39 +538,38 @@ Level.prototype.assignControlsToKeys = function(player) {
  * FUNCTION: Set the direction of the move based on the key or swipe direction
  *           and update the level accordingly
  * PARAMETERS: 1. Action (either a keyCode or a swipe direction)
- *             2. Player Object
  * RETURNS: undefined
  * DEPENDENCIES: + Player.update(Level)
 **/
-Level.prototype.matchUserInputToGameActions = function(action, player) {
+Level.prototype.matchUserInputToGameActions = function(action) {
 
   switch (action) {
 
     case 38: // arrow up
     case 'up': // swipe up
 
-      player.direction = 'up';
+      this.player.direction = 'up';
       break;
     
     case 39: // arrow right
     case 'right': // swipe right
     
-      player.direction = 'right';
+      this.player.direction = 'right';
       break;
     
     case 40: // arrow down
     case 'down': // swipe down
     
-      player.direction = 'down';
+      this.player.direction = 'down';
       break;
     
     case 37: // arrow left
     case 'left': // swipe left
     
-      player.direction = 'left';
+      this.player.direction = 'left';
       break;
   }
-  player.update(this);
+  this.player.update(this);
 
 };
 
@@ -429,7 +578,6 @@ Level.prototype.matchUserInputToGameActions = function(action, player) {
  * FUNCTION: Set the direction of the move based on the key or swipe direction
  *           and update the level accordingly
  * PARAMETERS: 1. Action (either a keyCode or a swipe direction)
- *             2. Player Object
  * RETURNS: undefined
  * DEPENDENCIES: None
 **/
@@ -452,16 +600,15 @@ Level.prototype.updatNextColorQueue = function() {
 
 /**
  * FUNCTION: Win Level. This function is called when a user completed the level target
- * PARAMETERS: 1. Player Object: Used to retrieve the position of the current cell
+ * PARAMETERS: None
  * RETURNS: undefined
  * DEPENDENCIES: + Level.setPlusIconPosition()
- *               + Level.resetLevel(Player)
- *               + Level.endLevel()
 **/
-Level.prototype.win = function(player) {
+Level.prototype.win = function() {
 
   // First, prevent users from moving more
   $('body').off('keydown');
+  $('body').off('swipe');
 
   // Play the level complete sound
   let audioMatch = new Audio();
@@ -472,8 +619,8 @@ Level.prototype.win = function(player) {
   setTimeout(function() { $('.current').remove(); }, 10 );
  
   // Change the current cell icon from 'o' '+'
-  let selector = '[data-row=' + player.currentCell.row + ']' +
-                 '[data-col=' + player.currentCell.column + ']';
+  let selector = '[data-row=' + this.player.currentCell.row + ']' +
+                 '[data-col=' + this.player.currentCell.column + ']';
   $(selector).append($('<div>').addClass('won'));
   $('.won').html("&#9532;");
   
@@ -483,43 +630,33 @@ Level.prototype.win = function(player) {
   // Change the current cell background with animation
   $(selector).animate({ backgroundColor: "#000"}, 100 );
   
-  // Ask what the user wants to do now (after a small delay)
+  // After a small delay
   let timeoutId = setTimeout(function() {
 
-    let userChoice = confirm("Wow, you rock! Wanna replay this level?");
-    
-    // OK: RETRY, then reset the game
-    if ( userChoice ) {
-      console.log("Cool, let's roll!");
-      this.resetLevel(player);
+    // Load next level
+    let nextLevelProperties = levelProperties["level" + ( this.number + 1 )];
+    this.load(nextLevelProperties, true);
 
-    // KO: END the game
-    } else {
-      this.endLevel();
-    }
-  }.bind(this), 400);
+  }.bind(this), 3200);
 
 };
 
 
 /**
  * FUNCTION: Resets a level
- * PARAMETERS: 1. Player Object: Used to reset the player in the level
+ * PARAMETERS: None
  * RETURNS: undefined
  * DEPENDENCIES: + Player.clearPlayer(Boolean)
  *               + Level.clearLevel()
- *               + Level.initLevel(Player)
+ *               + Level.initLevel()
 **/
-Level.prototype.resetLevel = function(player) {
+Level.prototype.resetLevel = function() {
   
   // Remove the player from the level
-  player.clearPlayer(true);
+  this.player.clearPlayer(true);
 
   // Remove all the level elements and clean all level data
   this.clearLevel();
-
-  // Re-initialise the level  
-  this.initLevel(player);
 
 };
 
@@ -532,16 +669,6 @@ Level.prototype.resetLevel = function(player) {
 **/
 Level.prototype.clearLevel = function() {
   
-  // Reset the Level Object
-  this.nextColorsQueue = [];
-
-  // Reset the colorQueue to its initial value
-  let levelProperties = eval("level"+this.number+"Properties");
-
-  for (let index = 0; index < levelProperties.nextColorsQueue.length; index += 1) {
-    this.nextColorsQueue.push(levelProperties.nextColorsQueue[index]);
-  }
-  
   // Clear the board on the screen
   $('.board > .cell').remove();
 
@@ -549,33 +676,16 @@ Level.prototype.clearLevel = function() {
 
 
 /**
- * FUNCTION: Ends the game
- * PARAMETERS: 1. Player Object: Used to delete the player in the level
- * RETURNS: undefined
- * DEPENDENCIES: None
-**/
-Level.prototype.endLevel = function(player) {
-  
-  // Display good bye message 
-  timeoutId = setTimeout(function() { 
-    alert("OK, see you around.")
-  }, 200);
-
-};
-
-
-/**
  * FUNCTION: Lost Level. This function is called when a user got stuck in a level
- * PARAMETERS: 1. Player Object: Used to retrieve the position of the current cell
+ * PARAMETERS: None
  * RETURNS: undefined
  * DEPENDENCIES: + Level.setXIconPosition()
- *               + Level.resetLevel(Player)
- *               + Level.endLevel()
 **/
-Level.prototype.loose = function(player) {
+Level.prototype.loose = function() {
   
   // First, prevent users from moving more
   $('body').off('keydown');
+  $('body').off('swipe');
   
   // Play the level lost sound
   let audioMatch = new Audio('./sounds/boss dies.wav');
@@ -585,28 +695,21 @@ Level.prototype.loose = function(player) {
   setTimeout(function() { $('.current').remove(); }, 10 );
  
   // Change the current cell icon from 'o' 'x'
-  let selector = '[data-row=' + player.currentCell.row + ']' +
-                 '[data-col=' + player.currentCell.column + ']';
+  let selector = '[data-row=' + this.player.currentCell.row + ']' +
+                 '[data-col=' + this.player.currentCell.column + ']';
   $(selector).append($('<div>').addClass('lost'));
   $('.lost').html("&#9587;");
   
   // Position the x icon according the size of a cell
   this.setXIconPosition();
 
-  // Ask what the user wants to do now (after a small delay)
+  // After a small delay
   let timeoutId = setTimeout(function() {
 
-    let userChoice = confirm("Too bad, you just lost! Wanna retry?");
-
-    // OK: RETRY, then reset the game
-    if ( userChoice ) {
-      console.log("Cool, let's roll!");
-      this.resetLevel(player);
-
-    // KO: END the game
-    } else {
-      this.endLevel();
-    }
-  }.bind(this), 400);
+    // Reload the current level
+    let currentLevelProperties = levelProperties["level" + this.number];
+    this.load(currentLevelProperties, true);
+    
+  }.bind(this), 3200);
 
 };

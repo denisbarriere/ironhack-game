@@ -9,9 +9,10 @@ function Game() {
   // Initialise the Player Object
   this.player = new Player();
 
-  // Initialise the Level Object to the first level for a start
-  this.level = new Level(level1Properties);
-  this.level.initLevel(this.player);
+  // Initialise the Level Object
+  this.level = new Level(this.player);
+  
+  // this.level.initLevel(this.player);
 
 }
 
@@ -22,7 +23,6 @@ function Game() {
  *    => Functions            *
  *                            *
  * ****************************/
-
 /**
  * FUNCTION: Call all the required functions to resize the game
  * PARAMETERS: None

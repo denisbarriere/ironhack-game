@@ -53,3 +53,11 @@ const level3Properties = {
   successInstructions: `<p>Make <span>15</span></p>
                         <p>Matches!</p>`
 };
+
+
+// Global level properties object accessible by other js files
+const levelProperties = {
+  level1: level1Properties,
+  level2: level2Properties,
+  level3: level3Properties
+}

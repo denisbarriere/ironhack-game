@@ -161,14 +161,13 @@ Player.prototype.move = function (level) {
     // But the cell they request is not a valid move (either active or out of the board)
     // In that case, we raise a flag (used to avoid displaying move animation in the draw function)
     // and not move the current cell
-    console.log("You can't move to this position");
     this.cannotMove = true;
   
   } else {
 
     // If we are here, it means that there is no cell around, so the game is over
     // This is just a safety, because there is no case identified so far where we would be in this case
-    console.log("Do we ever get here?")
+    console.log("[Info] Do we ever get here?")
     level.loose(this);
 
   }
@@ -228,7 +227,7 @@ Player.prototype.setNextCell = function (level) {
       this.nextCell = { row: this.currentCell.row + 1,column: this.currentCell.column, color: level.nextColorsQueue[0], current: false };
       break;
     default: 
-      console.log("[log] Player.prototype.move: '" + this.direction + "' direction is not defined");
+      console.log("[Info] Player.prototype.move: '" + this.direction + "' direction is not defined");
   }
 
 };
@@ -346,7 +345,7 @@ Player.prototype.showBubble = function(message, infoNumber, level) {
         $('.info').toggleClass('grey');
         break;
       default: 
-        console.log("Unexpected cell color: ", this.currentCell.color);
+        console.log("[Info] Unexpected cell color: ", this.currentCell.color);
     };
   }
 
@@ -603,8 +602,6 @@ Player.prototype.isFreeCellAround = function (cell, level) {
   }
   
   // Else, it means that the Player can not move to any direction. The Player is stuck
-  console.log("You are stuck mate :'(");
-
   // In that case, return FALSE
   return false;
 
@@ -680,9 +677,10 @@ Player.prototype.drawPlayer = function(level) {
           // if ( this.direction === 'left' ) { $(selector).fadeIn('slide',{direction:'right'},1000); }
         
           // Fade in for the first cell displayed
-          if ( this.direction === undefined) { $(selector).fadeIn(200); } else {
+          if ( this.direction === undefined || this.direction === 'None') { $(selector).fadeIn(200); }
            
-            // Play the move sound
+          // Play the move sound, except for the first cell at level loading
+          if ( this.direction !== undefined && this.direction !== 'None' ) {
             let audioMove = new Audio('./sounds/branch_break.mp3');
             audioMove.play();
           }
