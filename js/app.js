@@ -30,6 +30,24 @@ $(document).ready(function() {
   });
 
 
+  /** 
+   *  Prevent pinch and double tap in iOS10
+  **/
+  // Prevent pinch
+  document.addEventListener('touchmove', function (event) {
+    if (event.scale !== 1) { event.preventDefault(); }
+  }, false);
+
+  // Prevent double tap
+  var lastTouchEnd = 0;
+  document.addEventListener('touchend', function (event) {
+    let now = (new Date()).getTime();
+    if (now - lastTouchEnd <= 300) {
+      event.preventDefault();
+    }
+    lastTouchEnd = now;
+  }, false);
+
   /**
    *  Resize the game automatically when the user resizes the view
   **/

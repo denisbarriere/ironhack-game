@@ -215,12 +215,13 @@ body {
 
 .game-screen {
   /* Positioning */
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
   position: fixed;
 
   /* Styling */
-  background-color: #e7e7e7;
+  /* background-color: #e7e7e7; */
+  background-color: red;
  }
 
 /* HEADER */
@@ -414,9 +415,12 @@ body {
 /* Increase font size for retina dispalay */
 @media ( -webkit-min-device-pixel-ratio: 2 ), 
        ( min-resolution: 192dpi ) { 
-  .info,
-  .back-to-menu > a {
+  .info {
     font-weight: 400; 
+  }
+
+  .back-to-menu > a {
+    font-weight: bold;
   }
 }
 
@@ -447,6 +451,7 @@ body {
   /* Positioning */
   display: block;
   width: 0;
+  min-height: 3rem;
   border-width: 0 0 2rem 1rem;
   position: absolute;
   right: 12rem;
@@ -524,7 +529,6 @@ body {
 /* Size of the forth info bubble */
 .info.fourth-info { 
   width: 12rem;
-  height: 3rem;
   top: -15%;
 }
 
