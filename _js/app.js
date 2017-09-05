@@ -16,20 +16,27 @@ $(document).ready(function() {
   // First load the landing page
   $('.game-landing-container > h1').fadeIn(300);
 
-  $('.btn.game-landing-container__menu--black').on('click', function() {
+  // PLAY Button
+  $('.js-play').on('click', function() {
 
-    // Play the Game start sound
-    let audioMatch = new Audio('./sounds/sword shine 1.wav');
-    audioMatch.play();
-
-    // Load the menu
-    $('.game-landing-container').delay(200).hide('slide',{direction:'left'},600);
+    // Play the Game start sound and load the menu
+    game.menuStart();
 
     // Load the level 1
     game.level.load(levelProperties.level1);
       
   });
 
+
+  // ENDLESS Button
+  $('.js-endless').on('click', function() {
+
+    // Play the Game start sound
+    let audioMatch = new Audio('./_sounds/sword shine 1.wav');
+    audioMatch.play();
+
+    
+  });
 
   /** 
    *  Prevent pinch and double tap in iOS10

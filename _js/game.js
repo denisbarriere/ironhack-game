@@ -24,6 +24,24 @@ function Game() {
  *                            *
  * ****************************/
 /**
+ * FUNCTION: Menu start, playing a sound and starting the animation
+ * PARAMETERS: None
+ * RETURNS: undefined
+ * DEPENDENCIES: None
+**/
+Game.prototype.menuStart = function() {
+
+  // Play the Game start sound
+  let audioMatch = new Audio('./_sounds/sword shine 1.wav');
+  audioMatch.play();
+
+  // Load the menu
+  $('.game-landing-container').delay(200).hide('slide',{direction:'left'},600);
+
+};
+
+
+ /**
  * FUNCTION: Call all the required functions to resize the game
  * PARAMETERS: None
  * RETURNS: undefined

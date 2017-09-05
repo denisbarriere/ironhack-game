@@ -83,7 +83,7 @@ body {
 
 .game-landing-container__title {
   /* Animate with keyframe */
-  animation: slideGameLogoUp .5s 1s forwards ease;
+  animation: slideGameLogoUp .6s 1s forwards ease;
 }
 
 /* Logo animation keyframe */
@@ -131,7 +131,7 @@ body {
 }
 
 .btn.game-landing-container__menu--black {
-  width: 12.8rem;
+  width: 15.4rem;
   color: #fff;
   background-color: #000;  
 }
@@ -142,6 +142,9 @@ body {
   font-weight: 400;
  }
 
+ .btn.game-landing-container__menu--black:first-child {
+   margin-bottom: 2rem;
+ }
 
 /**
  * LEVEL TITEL -- LOADING PAGE --
@@ -224,8 +227,7 @@ body {
   position: fixed;
 
   /* Styling */
-  /* background-color: #e7e7e7; */
-  background-color: red;
+  background-color: #e7e7e7; 
  }
 
 /* HEADER */
@@ -418,7 +420,7 @@ body {
 }
 
 /* Increase font size for retina dispalay */
-/* @media ( -webkit-min-device-pixel-ratio: 2 ), 
+ @media ( -webkit-min-device-pixel-ratio: 2 ), 
        ( min-resolution: 192dpi ) { 
   
   .level > p,
@@ -430,7 +432,7 @@ body {
     font-weight: 700;
   }
 
-} */
+}
 
 /* position the bubble horizontally on the left or right of the cell */
 .info.left { left: 68%; }

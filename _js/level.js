@@ -58,6 +58,11 @@ Level.prototype.load = function(level, nextLevel) {
 
       // Then, load the first level loading
       $('.level-loading-container').show();
+
+      let levelLoadingHeight = $('.level').css('padding-top');
+      levelLoadingHeight = parseInt(levelLoadingHeight.slice(0, levelLoadingHeight.length - 2));
+      levelLoadingHeight += $('.level').height();
+
       $('.level-loading-container').delay(2200).animate({ backgroundColor: "#fff"}, 600 );
       $('.levelTarget p').delay(2200).animate({ color: "#fff"}, 600 );
       $('.levelTarget').delay(2200).animate({ borderTopColor: "#fff"}, 600 );
@@ -612,7 +617,7 @@ Level.prototype.win = function() {
 
   // Play the level complete sound
   let audioMatch = new Audio();
-  audioMatch.src = './sounds/133284__fins__level-completed.wav';
+  audioMatch.src = './_sounds/133284__fins__level-completed.wav';
   audioMatch.play();
 
   // Delete the 'o' icon after a little delay
@@ -688,7 +693,7 @@ Level.prototype.loose = function() {
   $('body').off('swipe');
   
   // Play the level lost sound
-  let audioMatch = new Audio('./sounds/boss dies.wav');
+  let audioMatch = new Audio('./_sounds/boss dies.wav');
   audioMatch.play();
 
   // Delete the 'o' icon after a little delay
