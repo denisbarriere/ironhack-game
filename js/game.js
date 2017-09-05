@@ -32,7 +32,7 @@ function Game() {
 Game.prototype.menuStart = function() {
 
   // Play the Game start sound
-  let audioMatch = new Audio('./_sounds/sword shine 1.wav');
+  let audioMatch = new Audio('./sounds/sword shine 1.wav');
   audioMatch.play();
 
   // Load the menu
