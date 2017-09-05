@@ -3,7 +3,7 @@
 */
 
 /* FONT */
-@import url('https://fonts.googleapis.com/css?family=Josefin+Sans:100:300,400,700');
+@import url('https://fonts.googleapis.com/css?family=Josefin+Sans:100,100i,300,400,700');
 
 /**
  * CSS Reset
@@ -70,7 +70,7 @@ body {
   display: none;
   
   /* Styling */
-  font-size: 4rem;
+  font-size: 2.6rem;
   font-weight: 400;
   color: #fff;
 }
@@ -95,9 +95,9 @@ body {
 .landing-cell { 
   /* Positioning */
   display: inline-block;
-  height: 4.5rem;
+  height: 4.2rem;
   width: 6.2rem;
-  padding-top: 1.7rem;
+  padding-top: 2rem;
 }
 
 .game-landing-container__menu {
