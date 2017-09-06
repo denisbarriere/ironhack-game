@@ -12,8 +12,6 @@ function Game() {
   // Initialise the Level Object
   this.level = new Level(this.player);
   
-  // this.level.initLevel(this.player);
-
 }
 
 
