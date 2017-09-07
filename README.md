@@ -37,6 +37,12 @@ The project is deployed to GitHub Pages and is accessible [here](https://denisba
 * [jQuery UI](https://jqueryui.com/) - Used for sliding effect (not used anymore at the moment since it was not working properly on mobile. It is a defect in Trello to be fixed)
 * [jQuery Mobile Events](https://github.com/benmajor/jQuery-Touch-Events) - **Version 1.0.9** _(2017-06-07)_ Used for swipe gestures on mobile 
 
+## Code Quality Audit
+
+* Powered by [https://deepscan.io](https://deepscan.io)
+
+[![DeepScan Grade](https://deepscan.io/api/projects/391/branches/605/badge/grade.svg)](https://deepscan.io/dashboard/#view=project&pid=391&bid=605)
+
 ## Contributing
 
 Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
