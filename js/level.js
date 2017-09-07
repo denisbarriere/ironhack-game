@@ -45,9 +45,7 @@ Level.prototype.load = function(level, nextLevel) {
 
       // If a level is already displayed, first hide it
       if ( nextLevel) {
-
         this.resetLoadingPage();
-      
       }
 
       // Set the level number
@@ -58,11 +56,6 @@ Level.prototype.load = function(level, nextLevel) {
 
       // Then, load the first level loading
       $('.level-loading-container').show();
-
-      let levelLoadingHeight = $('.level').css('padding-top');
-      levelLoadingHeight = parseInt(levelLoadingHeight.slice(0, levelLoadingHeight.length - 2));
-      levelLoadingHeight += $('.level').height();
-
       $('.level-loading-container').delay(2200).animate({ backgroundColor: "#fff"}, 600 );
       $('.levelTarget p').delay(2200).animate({ color: "#fff"}, 600 );
       $('.levelTarget').delay(2200).animate({ borderTopColor: "#fff"}, 600 );
@@ -271,14 +264,13 @@ Level.prototype.setBoardSize = function() {
   let viewportHeight = $(window).height();
 
   // get the board dimensions
-  let boardWidth = $('.board').width();
   let boardHeight = viewportHeight * ( 76.41 / 100 );
  
   // Calculate the ratio
   let boardRatio = this.width / this.height;
 
   // Calculate the board width based on the height and the board ratio
-  boardWidth = boardHeight * boardRatio;
+  let boardWidth = boardHeight * boardRatio;
   
   /* If the width is larger than the viewport width, then 
       1. Adpat the width to the viewport width
@@ -636,7 +628,7 @@ Level.prototype.win = function() {
   $(selector).animate({ backgroundColor: "#000"}, 100 );
   
   // After a small delay
-  let timeoutId = setTimeout(function() {
+  setTimeout(function() {
 
     // Load next level
     let nextLevelProperties = levelProperties["level" + ( this.number + 1 )];
@@ -709,7 +701,7 @@ Level.prototype.loose = function() {
   this.setXIconPosition();
 
   // After a small delay
-  let timeoutId = setTimeout(function() {
+  setTimeout(function() {
 
     // Reload the current level
     let currentLevelProperties = levelProperties["level" + this.number];

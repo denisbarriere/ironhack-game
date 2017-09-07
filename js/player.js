@@ -395,7 +395,7 @@ Player.prototype.findAllMatches = function (cell) {
       if( !this.activeCells[element].alreadyChecked ) {
 
         // Mark the cell as matched
-        this.activeCells[element].matched;
+        this.activeCells[element].matched = true;
 
         // Recursively check the cell and all following cells that are touching and have the same color
         this.findAllMatches(this.activeCells[element]);
