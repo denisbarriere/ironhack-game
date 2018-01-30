@@ -1,5 +1,5 @@
 /******************************
- *                            * 
+ *                            *
  *  OBJECT: Player            *
  *    => Constructor          *
  *                            *
@@ -20,13 +20,13 @@ function Player() {
 
 
 /******************************
- *                            * 
+ *                            *
  *  OBJECT: Player            *
  *    => Functions            *
  *                            *
  * ****************************/
 /**
- * FUNCTION: 
+ * FUNCTION:
  * PARAMETERS: 1. Level Object
  * RETURNS: undefined
  * DEPENDENCIES: + Player.move(Level)
@@ -34,11 +34,11 @@ function Player() {
  *               + Player.drawPlayer(Level)
 **/
 Player.prototype.update = function(level) {
-  
-  // Process player move request
-  this.move(level);  
 
-  // Clear the player moves on the board  
+  // Process player move request
+  this.move(level);
+
+  // Clear the player moves on the board
   this.clearPlayer();
 
   // Draw the player moves (now, including the new elements from the move request)
@@ -65,7 +65,7 @@ Player.prototype.update = function(level) {
  *               + Player.isFreeCellAround(Cell object: { row: <>, column: <> }, Level)
 **/
 Player.prototype.move = function (level) {
-  
+
   // First things first, set .alreadyCheck and .matched to false for all activeCells elements
   this.clearActiveMatches();
 
@@ -99,12 +99,12 @@ Player.prototype.move = function (level) {
 
     // Add this new cell to the activeCells array
     this.activeCells.push(currentValidMove);
-    
+
     // Update the next colors array
     level.updatNextColorQueue();
-       
+
     // Display the information bubbles in level 1
-    if (this.nbLevelMoves === 1 && level.number === 1) { this.showBubble("You can only move to an empty space.", 2, level); } 
+    if (this.nbLevelMoves === 1 && level.number === 1) { this.showBubble("You can only move to an empty space.", 2, level); }
     if (this.nbLevelMoves === 2 && level.number === 1) { this.showBubble("Don't get locked in!", 3, level); }
     if (this.nbLevelMoves === 3 && level.number === 1) { this.showBubble("This shows the next color.", 4, level); }
     if (this.nbLevelMoves === 4 && level.number === 1) { this.showBubble("Match 3 or more squares of the same color!", 5, level); }
@@ -112,11 +112,11 @@ Player.prototype.move = function (level) {
 
     // Calculate the number of cells of the same color (the new current cell color) are touching
     let nbMatches = this.getNbMatches(level);
-    
+
     // If the next position makes 3 cells of the same color touching,
     // it means we have a color match
     if ( nbMatches >= 3 ) {
-    
+
       // Clear all previous matches
       this.clearMatches();
 
@@ -128,41 +128,41 @@ Player.prototype.move = function (level) {
       audioMatch.play();
 
       // If the Player score if greater or equal to the level goal,
-      // it means that the Player won the level, 
+      // it means that the Player won the level,
       if ( this.levelScore >= level.success ) {
 
         // The player won the level!
         level.win(this);
-      
+
       }
 
     // Else, we have less than 3 matches,
     } else {
-      
+
       // So we need to clear the matches flags for the next move
       // by setting the .alreadyCheck and .matched flags to false for all activeCells elements
       this.clearActiveMatches();
 
     }
 
-    // Finally, if the user cannot move anymore, 
+    // Finally, if the user cannot move anymore,
     // It means that the Player is stuck, so he/she lost the level. So we need to end the level
-    if ( !this.isFreeCellAround(this.currentCell, level) ) {   
+    if ( !this.isFreeCellAround(this.currentCell, level) ) {
 
       level.loose(this);
-    
-    } 
-  
-  // If the next cell is either active or out of the board, 
+
+    }
+
+  // If the next cell is either active or out of the board,
   // Then we need to check if there is a free cell around
   } else if ( this.isFreeCellAround(this.currentCell, level) ) {
-    
+
     // If yes (there is a free cell around), it means that the user is not stuck
     // But the cell they request is not a valid move (either active or out of the board)
     // In that case, we raise a flag (used to avoid displaying move animation in the draw function)
     // and not move the current cell
     this.cannotMove = true;
-  
+
   } else {
 
     // If we are here, it means that there is no cell around, so the game is over
@@ -190,7 +190,7 @@ Player.prototype.clearActiveMatches = function() {
     // Reset the .alreadyChecked and .matched flags to FALSE
     this.activeCells[index].alreadyChecked = false;
     this.activeCells[index].matched = false;
-  
+
   }
 
 };
@@ -204,7 +204,7 @@ Player.prototype.clearActiveMatches = function() {
  * DEPENDENCIES: None
 **/
 Player.prototype.setNextCell = function (level) {
-  
+
   // Depending on the direction, find which is the next cell, where the player wants to move to
   switch(this.direction) {
     case 'left':
@@ -226,7 +226,7 @@ Player.prototype.setNextCell = function (level) {
       // Get the next position and color
       this.nextCell = { row: this.currentCell.row + 1,column: this.currentCell.column, color: level.nextColorsQueue[0], current: false };
       break;
-    default: 
+    default:
       console.log("[Info] Player.prototype.move: '" + this.direction + "' direction is not defined");
   }
 
@@ -241,12 +241,12 @@ Player.prototype.setNextCell = function (level) {
  * DEPENDENCIES: None
 **/
 Player.prototype.isCellFree = function (cell) {
-  
-  // Look in the active cells array, 
+
+  // Look in the active cells array,
   // if the next position is matching an active cell
   // The some() function will return true
   // So we return the opposite: TRUE if no match or FALSE if matches
-  return !this.activeCells.some( function (element) { 
+  return !this.activeCells.some( function (element) {
     return element.row == cell.row && element.column == cell.column;
   }.bind(this));
 
@@ -258,22 +258,22 @@ Player.prototype.isCellFree = function (cell) {
  * PARAMETERS: 1. Cell object: { row: <>, column: <> }
  *             2. Level Object
  * RETURNS: + TRUE if the cell to check is within the board
- *          + FALSE if the cell to check is outside of the board 
+ *          + FALSE if the cell to check is outside of the board
  * DEPENDENCIES: None
 **/
 Player.prototype.isCellInBoard = function (cell, level) {
-  
+
   // If the cell is out of the board
-  if (  cell.row < 0 || 
+  if (  cell.row < 0 ||
         cell.row > level.height - 1 ||
         cell.column < 0 ||
         cell.column > level.width - 1
-  ) { 
+  ) {
     // Return FALSE
     return false;
 
   // Else, return TRUE
-  } else { 
+  } else {
     return true;
   }
 
@@ -291,11 +291,11 @@ Player.prototype.isCellInBoard = function (cell, level) {
  * DEPENDENCIES: None
 **/
 Player.prototype.showBubble = function(message, infoNumber, level) {
- 
+
   // Remove the previous bubble
   $('.info').remove();
-         
-  // If the function is called with no parameters, then the function only cleans the last bubble 
+
+  // If the function is called with no parameters, then the function only cleans the last bubble
   if (arguments.length > 0) {
 
     // First convert the infoNumber to target the proper CSS class
@@ -303,10 +303,10 @@ Player.prototype.showBubble = function(message, infoNumber, level) {
     let headerPosition = false; // Variable used to flag the info bubbles to be displayed in the header
     let selector; // Variable used to select a cell on the board
 
-    if ( infoNumber === 2 ) { infoOrder = "second"; } 
+    if ( infoNumber === 2 ) { infoOrder = "second"; }
     if ( infoNumber === 3 ) { infoOrder = "third"; }
     if ( infoNumber === 4 ) { infoOrder = "fourth"; headerPosition = true; }
-    if ( infoNumber === 5 ) { infoOrder = "fifth"; }     
+    if ( infoNumber === 5 ) { infoOrder = "fifth"; }
 
     // And display the second one
     if ( !headerPosition ) {
@@ -323,13 +323,13 @@ Player.prototype.showBubble = function(message, infoNumber, level) {
     $(selector).append($('<div>').addClass('info ' + infoOrder + '-info'));
     $('.info').text(message);
     $('.info').fadeIn(400);
-    
+
     // Position the bubble based on the move direction
     let columnSide = Math.ceil(level.width / 2);
-     
+
     if ( this.currentCell.column >= columnSide && !headerPosition ) {
       $('.info').addClass('right');
-    } else { 
+    } else {
       $('.info').addClass('left');
     }
 
@@ -344,7 +344,7 @@ Player.prototype.showBubble = function(message, infoNumber, level) {
       case 'grey':
         $('.info').toggleClass('grey');
         break;
-      default: 
+      default:
         console.log("[Info] Unexpected cell color: ", this.currentCell.color);
     };
   }
@@ -363,10 +363,10 @@ Player.prototype.getNbMatches = function(level) {
 
   // Recursively check all touching cells to find the ones with the same color
   this.findAllMatches(this.activeCells[this.activeCells.length - 1]);
-  
+
   // Count the number of cells with the same color as the current one
   let count = this.countMatches();
-  
+
   // Return the number of matches
   return count;
 
@@ -381,14 +381,14 @@ Player.prototype.getNbMatches = function(level) {
  * DEPENDENDIES: + Player.touchWithColor(Active Cell Object: { row: <>, column: <>, color: <>, current: <> })
 **/
 Player.prototype.findAllMatches = function (cell) {
-  
+
   // Test for touching cells with the same color
   let isTouchingWithSameColor = this.touchWithColor(cell);
-  
-  // If cells are touching with the same color 
+
+  // If cells are touching with the same color
   if ( isTouchingWithSameColor.length > 0 ) {
-    
-    // For each cell touching with the same color      
+
+    // For each cell touching with the same color
     isTouchingWithSameColor.forEach(function (element) {
 
       // if the cell has not been checked already
@@ -401,7 +401,7 @@ Player.prototype.findAllMatches = function (cell) {
         this.findAllMatches(this.activeCells[element]);
       }
     }.bind(this));
-  } 
+  }
 
 };
 
@@ -427,15 +427,15 @@ Player.prototype.touchWithColor = function(cell) {
   let rightCell = { row: cell.row    , column: cell.column + 1 };
   let downCell  = { row: cell.row + 1, column: cell.column     };
   let leftCell  = { row: cell.row    , column: cell.column - 1 };
-  
+
   // Get cells index from the "activeCells" array
   let cellIndex = this.getActiveCellIndex(cell);
   let upCellIndex = this.getActiveCellIndex(upCell);
   let rightCellIndex = this.getActiveCellIndex(rightCell);
   let downCellIndex = this.getActiveCellIndex(downCell);
   let leftCellIndex = this.getActiveCellIndex(leftCell);
-   
-  // This array inclues objects storing the test results clockwise (0: result of test up, 1: result of test right, 2: result of test down, 3: result of test left)  
+
+  // This array inclues objects storing the test results clockwise (0: result of test up, 1: result of test right, 2: result of test down, 3: result of test left)
   let objToReturn = [];
 
   // Variables store the return values of the 'Player.isSameColor' function in the four directions, clockwise (up, right, down, left)
@@ -443,12 +443,12 @@ Player.prototype.touchWithColor = function(cell) {
   let isRightCellSameColor = this.isSameColor(cellIndex, rightCellIndex);
   let isDownCellSameColor = this.isSameColor(cellIndex, downCellIndex);
   let isLeftCellSameColor = this.isSameColor(cellIndex, leftCellIndex);
-  
-  // Checks if two cells are touching and have the same color 
+
+  // Checks if two cells are touching and have the same color
   if ( this.isActive(upCell) && isUpCellSameColor !== false ) { objToReturn.push(isUpCellSameColor); }  // UP
   if ( this.isActive(rightCell) && isRightCellSameColor !== false ) { objToReturn.push(isRightCellSameColor); }  // RIGHT
   if ( this.isActive(downCell) && isDownCellSameColor !== false ) { objToReturn.push(isDownCellSameColor); }  // DOWN
-  if ( this.isActive(leftCell) && isLeftCellSameColor !== false ) { objToReturn.push(isLeftCellSameColor); } // LEFT  
+  if ( this.isActive(leftCell) && isLeftCellSameColor !== false ) { objToReturn.push(isLeftCellSameColor); } // LEFT
 
   // Mark the cell as alreadyChecked
   this.activeCells[cellIndex].alreadyChecked = true;
@@ -499,8 +499,8 @@ Player.prototype.isSameColor = function(cell1Index, cell2Index) {
   // The index can be -1 when a cell was not found in the "activeCells" array by the Player.getActiveCellIndex earlier in the code flow
   if ( cell1Index === -1 || cell2Index === -1 ) {
     return false;
-  } 
-  
+  }
+
   // if the color matches, return the cell2 index
   if ( this.activeCells[cell1Index].color === this.activeCells[cell2Index].color ) {
     return cell2Index;
@@ -522,7 +522,7 @@ Player.prototype.isActive = function(cell) {
 
   // Returns TRUE if cell is found in the active array,
   // Else FALSE
-  return this.activeCells.some(function (element) { 
+  return this.activeCells.some(function (element) {
     return element.row == cell.row && element.column == cell.column;
   }.bind(this));
 
@@ -536,9 +536,9 @@ Player.prototype.isActive = function(cell) {
  * DEPENDENCIES: None
 **/
 Player.prototype.countMatches = function() {
- 
+
   let counter = 0;
-  // Loop over the "activeCells" array 
+  // Loop over the "activeCells" array
   for (let index = 0; index < this.activeCells.length; index += 1) {
     // If the matched flag is set to TRUE, increase the counter
     if ( this.activeCells[index].matched ) {
@@ -552,7 +552,7 @@ Player.prototype.countMatches = function() {
 };
 
 
-/** 
+/**
  * FUNCTION: Removes all the matched cells from the 'Player.activeCells' array,
  *           except the current cell
  * PARAMETERS: None
@@ -562,14 +562,14 @@ Player.prototype.countMatches = function() {
 Player.prototype.clearMatches = function() {
 
   // Loop over the whole activeCells array
-  for (let index = this.activeCells.length -1; index >= 0; index -= 1) { 
-    
-    // if the matched flag is present and the cell is not the current one   
+  for (let index = this.activeCells.length -1; index >= 0; index -= 1) {
+
+    // if the matched flag is present and the cell is not the current one
     if ( this.activeCells[index].matched && !this.activeCells[index].current ) {
 
       // Then, remove the cell from the activeCells array
       this.activeCells.splice(index, 1);
-    
+
     }
   }
 
@@ -585,7 +585,7 @@ Player.prototype.clearMatches = function() {
  *               + Player.isCellInBoard(Cell object: { row: <>, column: <> }, Level Object)
 **/
 Player.prototype.isFreeCellAround = function (cell, level) {
-  
+
   // Set the values of the cells around
   let upCell    = { row: cell.row - 1, column: cell.column     };
   let rightCell = { row: cell.row    , column: cell.column + 1 };
@@ -597,10 +597,10 @@ Player.prototype.isFreeCellAround = function (cell, level) {
         (this.isCellFree(rightCell) && this.isCellInBoard(rightCell, level)) ||
         (this.isCellFree(downCell) && this.isCellInBoard(downCell, level)) ||
         (this.isCellFree(leftCell) && this.isCellInBoard(leftCell, level))
-  ) { 
+  ) {
     return true;
   }
-  
+
   // Else, it means that the Player can not move to any direction. The Player is stuck
   // In that case, return FALSE
   return false;
@@ -609,7 +609,7 @@ Player.prototype.isFreeCellAround = function (cell, level) {
 
 
 /**
- * FUNCTION: Clear the player information on the page 
+ * FUNCTION: Clear the player information on the page
  * PARAMETERS: 1. Boolean: Used as a flag to know if we are reseting the level (true)
  *                or just refreshing the page (no second param)
  * RETURNS: undefined
@@ -656,7 +656,7 @@ Player.prototype.drawPlayer = function(level) {
 
   // For each active cell, draw the cell on the page
   for (let index = 0 ; index < this.activeCells.length; index += 1) {
-      
+
       // Find the cell to update on the board
       let selector = '[data-row=' + this.activeCells[index].row + ']' +
                      '[data-col=' + this.activeCells[index].column + ']';
@@ -666,22 +666,23 @@ Player.prototype.drawPlayer = function(level) {
       // Set the current cell ( the cell with the o icon which is the first one the user can use )
       if ( this.activeCells[index].current ) {
         $(selector).append($('<div>').addClass('current'));
-        
+
         // Add animation effet to display the current cell
         // If the player is next to a cell or a border and going to this direction, don't show animation
         if( !this.cannotMove ) {
-          
-          // if ( this.direction === "up"  ) { $(selector).fadeIn('slide',{direction:'down'},1000); } 
+
+          // if ( this.direction === "up"  ) { $(selector).fadeIn('slide',{direction:'down'},1000); }
           // if ( this.direction === 'right' ) { $(selector).fadeIn('slide',{direction:'left'},1000); }
           // if ( this.direction === 'down' ) { $(selector).fadeIn('slide',{direction:'up'},1000); }
           // if ( this.direction === 'left' ) { $(selector).fadeIn('slide',{direction:'right'},1000); }
-        
+
           // Fade in for the first cell displayed
           if ( this.direction === undefined || this.direction === 'None') { $(selector).fadeIn(200); }
-           
+
           // Play the move sound, except for the first cell at level loading
           if ( this.direction !== undefined && this.direction !== 'None' ) {
             let audioMove = new Audio('./sounds/branch_break.mp3');
+            audioMove.currentTime = 0;
             audioMove.play();
           }
 
