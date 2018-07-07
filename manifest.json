@@ -6,27 +6,27 @@
   "background_color": "#fff",
   "description": "Flip tiles and match colours to move your way through each level in this beautiful, minimalist puzzle game.",
   "icons": [{
-    "src": "images/touch/homescreen48.png",
+    "src": "./assets/images/touch/homescreen48.png",
     "sizes": "48x48",
     "type": "image/png"
   }, {
-    "src": "images/touch/ .png",
+    "src": "./assets/images/touch/ .png",
     "sizes": "72x72",
     "type": "image/png"
   }, {
-    "src": "images/touch/homescreen96.png",
+    "src": "./assets/images/touch/homescreen96.png",
     "sizes": "96x96",
     "type": "image/png"
   }, {
-    "src": "images/touch/homescreen144.png",
+    "src": "./assets/images/touch/homescreen144.png",
     "sizes": "144x144",
     "type": "image/png"
   }, {
-    "src": "images/touch/homescreen168.png",
+    "src": "./assets/images/touch/homescreen168.png",
     "sizes": "168x168",
     "type": "image/png"
   }, {
-    "src": "images/touch/homescreen192.png",
+    "src": "./assets/images/touch/homescreen192.png",
     "sizes": "192x192",
     "type": "image/png"
   }],

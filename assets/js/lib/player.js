@@ -124,7 +124,7 @@ Player.prototype.move = function (level) {
       this.levelScore += nbMatches;
 
       // Play the match sound
-      let audioMatch = new Audio('./sounds/366102__original-sound__confirmation-upward.wav');
+      let audioMatch = new Audio('./assets/sounds/366102__original-sound__confirmation-upward.wav');
       audioMatch.play();
 
       // If the Player score if greater or equal to the level goal,
@@ -346,7 +346,7 @@ Player.prototype.showBubble = function(message, infoNumber, level) {
         break;
       default:
         console.log("[Info] Unexpected cell color: ", this.currentCell.color);
-    };
+    }
   }
 
 };
@@ -681,7 +681,7 @@ Player.prototype.drawPlayer = function(level) {
 
           // Play the move sound, except for the first cell at level loading
           if ( this.direction !== undefined && this.direction !== 'None' ) {
-            let audioMove = new Audio('./sounds/branch_break.mp3');
+            let audioMove = new Audio('./assets/sounds/branch_break.mp3');
             audioMove.currentTime = 0;
             audioMove.play();
           }

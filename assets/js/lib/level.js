@@ -1,5 +1,5 @@
 /**********************************
- *                                *  
+ *                                *
  *  OBJECT: Level                 *
  *    => Constructor              *
  *                                *
@@ -10,14 +10,14 @@
 function Level(player) {
 
   this.player = player // Reference to the player
-  
+
   // All the other Level properties will be initiated by the Level.initLevelData() function
 
-};
+}
 
 
 /******************************
- *                            * 
+ *                            *
  *  OBJECT: Level             *
  *    => Functions            *
  *                            *
@@ -38,8 +38,8 @@ function Level(player) {
 Level.prototype.load = function(level, nextLevel) {
 
     // If we have level to load
-    if (level) { 
-    
+    if (level) {
+
       // First, set all the level properties based on the level-data
       this.initLevelData(level);
 
@@ -61,17 +61,17 @@ Level.prototype.load = function(level, nextLevel) {
       $('.levelTarget').delay(2200).animate({ borderTopColor: "#fff"}, 600 );
 
       // And finally, hide it and show the level board
-      $('.level-loading-container').delay(8000, function() { 
-        $(this).hide(); 
+      $('.level-loading-container').delay(8000, function() {
+        $(this).hide();
       });
-      
+
       // Show the board after timeout
       setTimeout( function() {
         this.start();
       }.bind(this), 2400);
-    
+
     } else { // We completed all level, there is no more level
-    
+
       // End the game
       this.endLevel();
 
@@ -145,7 +145,7 @@ Level.prototype.initLevelData = function(level) {
 
   // Display the game board
   $('.game-container').show(600);
-      
+
   // Resize the board
   this.setBoardHeaderSize();
   this.setBoardSize();
@@ -169,7 +169,7 @@ Level.prototype.endLevel = function() {
   $('.level').append(`<p>Congratulations!</p>
     <div class="levelTarget">
       <p>You completed all levels!</p>
-      <p>More coming soon</p>      
+      <p>More coming soon</p>
     </div>`);
 
     // Then, load the first level loading
@@ -187,8 +187,8 @@ Level.prototype.endLevel = function() {
  *               + Player.drawPlayer(Level)
  *               + Level.assignControlsToKeys()
 **/
-Level.prototype.initLevel = function() { 
-  
+Level.prototype.initLevel = function() {
+
   /* BUILD THE BOARD */
   let currentIteration;
 
@@ -217,12 +217,12 @@ Level.prototype.initLevel = function() {
     if ( this.initState[index].current ) {
       currentIteration.current = true;
       this.player.currentCell = currentIteration;
-    
+
       // Add the information bubble, at level init, only at level 1
       if (this.number === 1 ) {
         let selector = '[data-row=' + this.player.currentCell.row + ']' +
                        '[data-col=' + this.player.currentCell.column + ']';
-        
+
         $(selector).append($('<div>').addClass('info left first-info'));
         $('.info.left.first-info').text('Swipe any direction to move!');
         $('.info.left.first-info').fadeIn(400);
@@ -231,7 +231,7 @@ Level.prototype.initLevel = function() {
 
     // Push the item to the activeCells array
     this.player.activeCells.push(currentIteration);
-  } 
+  }
 
   // Set the board header size on the page
   this.setBoardHeaderSize();
@@ -265,18 +265,18 @@ Level.prototype.setBoardSize = function() {
 
   // get the board dimensions
   let boardHeight = viewportHeight * ( 76.41 / 100 );
- 
+
   // Calculate the ratio
   let boardRatio = this.width / this.height;
 
   // Calculate the board width based on the height and the board ratio
   let boardWidth = boardHeight * boardRatio;
-  
-  /* If the width is larger than the viewport width, then 
+
+  /* If the width is larger than the viewport width, then
       1. Adpat the width to the viewport width
       2. Have the height based on the width and ratio
    */
-   if ( boardWidth > viewportWidth ) { 
+   if ( boardWidth > viewportWidth ) {
      boardWidth = $('.game-container').width() -10;
      $('.board').width(boardWidth + 'px');
 
@@ -295,7 +295,7 @@ Level.prototype.setBoardSize = function() {
    }
 
   // Calculate CSS left property to center the board
-  let boardLeftCSSProperty = ( ( 
+  let boardLeftCSSProperty = ( (
     ( viewportWidth - boardWidth ) /* Get the width space remaining on the screen */
     / 2 ) /* Devide the remaining by two to know how much to have left and right of the board */
     / viewportWidth ) * 100 ; /* Finally, convert this to a percentage */
@@ -304,12 +304,12 @@ Level.prototype.setBoardSize = function() {
   $('.board').css('left', boardLeftCSSProperty + '%');
 
   // Calculate the size of the cells
-  let cellWidth = boardWidth / this.width; 
-  let cellHeight = boardHeight / this.height; 
+  let cellWidth = boardWidth / this.width;
+  let cellHeight = boardHeight / this.height;
 
   // Set the cell size
-  $('.cell').width(cellWidth + 'px'); 
-  $('.cell').height(cellHeight + 'px'); 
+  $('.cell').width(cellWidth + 'px');
+  $('.cell').height(cellHeight + 'px');
 
   // Finally Calculate the position of the o, the + and x icons displayed in the current cell
   this.setOIconPosition();
@@ -325,7 +325,7 @@ Level.prototype.setBoardSize = function() {
  * RETURNS: undefined
  * DEPENDENCIES: None
  */
-Level.prototype.setOIconPosition = function() { 
+Level.prototype.setOIconPosition = function() {
 
   // position retrieve the o width and height
   let currentOWidth = $('.current').width();
@@ -352,7 +352,7 @@ Level.prototype.setOIconPosition = function() {
  * RETURNS: undefined
  * DEPENDENCIES: None
  */
-Level.prototype.setPlusIconPosition = function() { 
+Level.prototype.setPlusIconPosition = function() {
 
   // position retrieve the + width and height
   let currentPlusWidth = $('.won').width();
@@ -379,7 +379,7 @@ Level.prototype.setPlusIconPosition = function() {
  * RETURNS: undefined
  * DEPENDENCIES: None
  */
-Level.prototype.setXIconPosition = function() { 
+Level.prototype.setXIconPosition = function() {
 
   // position retrieve the x width and height
   let currentXWidth = $('.lost').width();
@@ -408,11 +408,11 @@ Level.prototype.setXIconPosition = function() {
  * DEPENDENCIES: None
  **/
 Level.prototype.setBoardHeaderSize = function() {
-  
+
   // Get the width and height of the game-header block
   let gameHeaderWidth = $('.game-header').width();
   let gameHeaderHeight = $('.game-header').height();
-  
+
   /* NEXT 3 COLORS */
   // Get the width and height of the next-colors block
   let nextColorwidth = $('.next-colors').width();
@@ -431,7 +431,7 @@ Level.prototype.setBoardHeaderSize = function() {
   let nextColorCellWidth = $('.preview-cell').width();
   let arrowUpWidth = $('.arrow-up').outerWidth();
 
-  // Remove the 'px form the value 
+  // Remove the 'px form the value
   nextColorMarginLeft = nextColorMarginLeft.slice(0, nextColorMarginLeft.length - 2);
 
   // Calculate the left position
@@ -448,8 +448,8 @@ Level.prototype.setBoardHeaderSize = function() {
 
   // Calculate the top and left positions to center it vertically and horizontally
   let levelGoalTop = ( gameHeaderHeight - levelGoalHeight ) / 2;
-  let levelGoalLeft = ( ( gameHeaderWidth - levelGoalwidth ) + ( nextColorwidth / 2 ) ) / 2; 
- 
+  let levelGoalLeft = ( ( gameHeaderWidth - levelGoalwidth ) + ( nextColorwidth / 2 ) ) / 2;
+
   // Set the computed top and left properties
   $('.level-goal').css('top', levelGoalTop + 'px');
   $('.level-goal').css('left', levelGoalLeft + 'px');
@@ -482,7 +482,7 @@ Level.prototype.setBoardHeaderSize = function() {
  * DEPENDENCIES: None
 **/
 Level.prototype.updateColorList = function() {
- 
+
   // Loop over the first three elements of the array and display them in the page
   for (let index = 0; index < 3; index += 1) {
       $('.color-list li:nth-child(' + (index + 1) + ')').addClass(this.nextColorsQueue[index]);
@@ -498,10 +498,10 @@ Level.prototype.updateColorList = function() {
  * DEPENDENCIES: + Level.matchUserInputToGameActions(action)
  */
 Level.prototype.assignControlsToKeys = function() {
-  
+
   // Add an event listener to enable users to play with the keyboard
   $('body').on('keydown', function(e) {
-    
+
     // Get the key pressed
     let action = e.keyCode;
 
@@ -525,7 +525,7 @@ Level.prototype.assignControlsToKeys = function() {
 
     // Perform game action based on the swipe direction
     this.matchUserInputToGameActions(action);
-     
+
   }.bind(this));
 
 };
@@ -547,22 +547,22 @@ Level.prototype.matchUserInputToGameActions = function(action) {
 
       this.player.direction = 'up';
       break;
-    
+
     case 39: // arrow right
     case 'right': // swipe right
-    
+
       this.player.direction = 'right';
       break;
-    
+
     case 40: // arrow down
     case 'down': // swipe down
-    
+
       this.player.direction = 'down';
       break;
-    
+
     case 37: // arrow left
     case 'left': // swipe left
-    
+
       this.player.direction = 'left';
       break;
   }
@@ -583,9 +583,9 @@ Level.prototype.updatNextColorQueue = function() {
   // Update the next colors array
   this.nextColorsQueue.shift();
 
-  // If not enough colors are remaining, then push the inital set of colors back  
+  // If not enough colors are remaining, then push the inital set of colors back
   if ( this.nextColorsQueue.length < 3 ) {
-      
+
     let levelProperties = eval("level"+this.number+"Properties");
     for (let index = 0; index < levelProperties.nextColorsQueue.length; index += 1) {
       this.nextColorsQueue.push(levelProperties.nextColorsQueue[index]);
@@ -609,24 +609,24 @@ Level.prototype.win = function() {
 
   // Play the level complete sound
   let audioMatch = new Audio();
-  audioMatch.src = './sounds/133284__fins__level-completed.wav';
+  audioMatch.src = './assets/sounds/133284__fins__level-completed.wav';
   audioMatch.play();
 
   // Delete the 'o' icon after a little delay
   setTimeout(function() { $('.current').remove(); }, 10 );
- 
+
   // Change the current cell icon from 'o' '+'
   let selector = '[data-row=' + this.player.currentCell.row + ']' +
                  '[data-col=' + this.player.currentCell.column + ']';
   $(selector).append($('<div>').addClass('won'));
   $('.won').html("&#9532;");
-  
+
   // Position the + icon according the size of a cell
   this.setPlusIconPosition();
 
   // Change the current cell background with animation
   $(selector).animate({ backgroundColor: "#000"}, 100 );
-  
+
   // After a small delay
   setTimeout(function() {
 
@@ -648,7 +648,7 @@ Level.prototype.win = function() {
  *               + Level.initLevel()
 **/
 Level.prototype.resetLevel = function() {
-  
+
   // Remove the player from the level
   this.player.clearPlayer(true);
 
@@ -665,7 +665,7 @@ Level.prototype.resetLevel = function() {
  * DEPENDENCIES: None
 **/
 Level.prototype.clearLevel = function() {
-  
+
   // Clear the board on the screen
   $('.board > .cell').remove();
 
@@ -679,24 +679,24 @@ Level.prototype.clearLevel = function() {
  * DEPENDENCIES: + Level.setXIconPosition()
 **/
 Level.prototype.loose = function() {
-  
+
   // First, prevent users from moving more
   $('body').off('keydown');
   $('body').off('swipe');
-  
+
   // Play the level lost sound
-  let audioMatch = new Audio('./sounds/boss dies.wav');
+  let audioMatch = new Audio('./assets/sounds/boss dies.wav');
   audioMatch.play();
 
   // Delete the 'o' icon after a little delay
   setTimeout(function() { $('.current').remove(); }, 10 );
- 
+
   // Change the current cell icon from 'o' 'x'
   let selector = '[data-row=' + this.player.currentCell.row + ']' +
                  '[data-col=' + this.player.currentCell.column + ']';
   $(selector).append($('<div>').addClass('lost'));
   $('.lost').html("&#9587;");
-  
+
   // Position the x icon according the size of a cell
   this.setXIconPosition();
 
@@ -706,7 +706,7 @@ Level.prototype.loose = function() {
     // Reload the current level
     let currentLevelProperties = levelProperties["level" + this.number];
     this.load(currentLevelProperties, true);
-    
+
   }.bind(this), 3200);
 
 };

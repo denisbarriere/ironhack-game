@@ -8,7 +8,7 @@ $(document).ready(function() {
   **/
   game = new Game();
 
-  
+
   /**
    *  GAME INIT: Animation showing the game title, then the level title and finally level 1 board
   **/
@@ -24,7 +24,7 @@ $(document).ready(function() {
 
     // Load the level 1
     game.level.load(levelProperties.level1);
-      
+
   });
 
 
@@ -32,13 +32,13 @@ $(document).ready(function() {
   $('.js-endless').on('click', function() {
 
     // Play the Game start sound
-    let audioMatch = new Audio('./sounds/sword shine 1.wav');
+    let audioMatch = new Audio('./assets/sounds/sword shine 1.wav');
     audioMatch.play();
 
-    
+
   });
 
-  /** 
+  /**
    *  Prevent pinch and double tap in iOS10
   **/
   // Prevent pinch
@@ -60,10 +60,10 @@ $(document).ready(function() {
   /**
    *  Resize the game automatically when the user resizes the view
   **/
-  $(window).resize(function() { 
+  $(window).resize(function() {
 
     if ( typeof game !== "undefined" ) {
-      game.resize(); 
+      game.resize();
     }
 
   });

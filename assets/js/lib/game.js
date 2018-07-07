@@ -1,22 +1,22 @@
 /******************************
- *                            * 
+ *                            *
  *  OBJECT: Game              *
  *    => Constructor          *
  *                            *
  * ****************************/
 function Game() {
-  
+
   // Initialise the Player Object
   this.player = new Player();
 
   // Initialise the Level Object
   this.level = new Level(this.player);
-  
+
 }
 
 
 /******************************
- *                            * 
+ *                            *
  *  OBJECT: Game              *
  *    => Functions            *
  *                            *
@@ -30,7 +30,7 @@ function Game() {
 Game.prototype.menuStart = function() {
 
   // Play the Game start sound
-  let audioMatch = new Audio('./sounds/sword shine 1.wav');
+  let audioMatch = new Audio('./assets/sounds/sword shine 1.wav');
   audioMatch.play();
 
   // Load the menu
